@@ -1,4 +1,4 @@
-package org.example;
+package org.example.vetcare.model;
 
 public class Animal {
 
