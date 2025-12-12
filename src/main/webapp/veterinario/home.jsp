@@ -11,6 +11,8 @@
     <title>Home Veterinario</title>
 </head>
 <body>
-Home Veterinario
+Home - Veterinario
+
+<a href="<%= request.getContextPath() %>/logout">Logout</a>
 </body>
 </html>

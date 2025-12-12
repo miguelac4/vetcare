@@ -32,24 +32,26 @@ public class AuthFilter implements Filter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        // rotas públicas
-        boolean isPublic =
-                path.equals("/login") ||
-                        path.equals("/login.jsp") ||
-                        path.startsWith("/css/") ||
-                        path.startsWith("/js/") ||
-                        path.startsWith("/images/");
-
-        if (isPublic) {
-            chain.doFilter(req, res);
-            return;
-        }
 
         HttpSession session = request.getSession(false);
-        boolean loggedIn = (session != null && session.getAttribute("userRole") != null);
+        String role = (session == null) ? null : (String) session.getAttribute("userRole");
 
-        if (!loggedIn) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        // 3) autorização por "área" (pastas)
+        boolean isAllowed =
+                (path.startsWith("/gerente/")      && role.equals("gerente")) ||
+                        (path.startsWith("/veterinario/")  && role.equals("veterinario")) ||
+                        (path.startsWith("/tutor/")        && role.equals("tutor")) ||
+                        (path.startsWith("/rececionista/") && role.equals("rececionista"));
+
+        // Se não está em nenhuma área protegida, deixa passar (ex.: /listarAnimais, /api/*, etc.)
+        boolean isRoleArea = path.startsWith("/gerente/") || path.startsWith("/veterinario/")
+                || path.startsWith("/tutor/") || path.startsWith("/rececionista/");
+
+        if (isRoleArea && !isAllowed) {
+            // bloquear com 403 e mensagem de erro
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().write("404 | Acesso negado: não tens permissões para aceder a esta página.");
             return;
         }
 

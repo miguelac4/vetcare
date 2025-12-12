@@ -11,6 +11,8 @@
     <title>Home Tutor</title>
 </head>
 <body>
-Home Tutor
+Home - Tutor
+
+<a href="<%= request.getContextPath() %>/logout">Logout</a>
 </body>
 </html>

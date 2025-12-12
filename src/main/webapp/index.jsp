@@ -16,14 +16,13 @@
 <h1>Bem-vindo à vetCare</h1>
 
 <ul>
-    <li><a href="listarAnimais">Listar animais</a></li>
-    <!-- aqui depois podes pôr links para outras funcionalidades -->
+    <li><a href="login">Login</a></li>
 </ul>
 
 <ul>
-    <li><a href="login">Login</a></li>
-    <!-- aqui depois podes pôr links para outras funcionalidades -->
+    <li><a href="register">Criar Conta</a></li>
 </ul>
+
 
 </body>
 </html>

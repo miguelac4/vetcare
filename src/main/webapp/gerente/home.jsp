@@ -11,6 +11,8 @@
     <title>Home Gerente</title>
 </head>
 <body>
-Home Gerente
+Home - Gerente
+
+<a href="<%= request.getContextPath() %>/logout">Logout</a>
 </body>
 </html>
