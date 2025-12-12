@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: vetcare
+-- Host: localhost    Database: vetcare
 -- ------------------------------------------------------
--- Server version	8.0.43
+-- Server version	8.0.44
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -373,6 +373,36 @@ LOCK TABLES `taxonomia` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `utilizador`
+--
+
+DROP TABLE IF EXISTS `utilizador`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `utilizador` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(120) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('rececionista','veterinario','tutor','gerente') NOT NULL,
+  `ativo` tinyint(1) NOT NULL DEFAULT '1',
+  `criado_em` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `utilizador`
+--
+
+LOCK TABLES `utilizador` WRITE;
+/*!40000 ALTER TABLE `utilizador` DISABLE KEYS */;
+INSERT INTO `utilizador` VALUES (1,'Rita Rececionista','rececionista@vetcare.pt','a89be1c881bbcba54f61f00f3525a952132faab31b9496ae35cbbbbb5e540a32','rececionista',1,'2025-12-12 14:42:33'),(2,'Vasco Veterinario','veterinario@vetcare.pt','a89be1c881bbcba54f61f00f3525a952132faab31b9496ae35cbbbbb5e540a32','veterinario',1,'2025-12-12 14:42:33'),(3,'Tiago Tutor','tutor@gmail.pt','a89be1c881bbcba54f61f00f3525a952132faab31b9496ae35cbbbbb5e540a32','tutor',1,'2025-12-12 14:42:33'),(4,'Guilherme Gerente','gerente@vetcare.pt','a89be1c881bbcba54f61f00f3525a952132faab31b9496ae35cbbbbb5e540a32','gerente',1,'2025-12-12 14:42:33');
+/*!40000 ALTER TABLE `utilizador` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `veterinario`
 --
 
@@ -405,4 +435,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-11 16:49:26
+-- Dump completed on 2025-12-12 15:21:45
