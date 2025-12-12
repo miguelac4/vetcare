@@ -6,6 +6,20 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+/*
+
+AuthFilter
+
+Ele verifica:
+
+- se a rota é pública (/login, css/js/imagens, etc.)
+- se não for pública, exige que exista sessão com userRole
+- se não houver sessão → faz redirect para /login
+
+*/
+
+
+
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
