@@ -46,10 +46,29 @@ public class AuthFilter implements Filter {
         }
 
         HttpSession session = request.getSession(false);
-        boolean loggedIn = (session != null && session.getAttribute("userRole") != null);
+        String role = (session == null) ? null : (String) session.getAttribute("userRole");
 
-        if (!loggedIn) {
+        if (role == null) {
             response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // 3) autorização por "área" (pastas)
+        boolean isAllowed =
+                (path.startsWith("/gerente/")      && role.equals("gerente")) ||
+                        (path.startsWith("/veterinario/")  && role.equals("veterinario")) ||
+                        (path.startsWith("/tutor/")        && role.equals("tutor")) ||
+                        (path.startsWith("/rececionista/") && role.equals("rececionista"));
+
+        // Se não está em nenhuma área protegida, deixa passar (ex.: /listarAnimais, /api/*, etc.)
+        boolean isRoleArea = path.startsWith("/gerente/") || path.startsWith("/veterinario/")
+                || path.startsWith("/tutor/") || path.startsWith("/rececionista/");
+
+        if (isRoleArea && !isAllowed) {
+            // bloquear com 403
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().write("404 | Acesso negado: não tens permissões para aceder a esta página.");
             return;
         }
 
