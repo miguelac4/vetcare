@@ -11,7 +11,9 @@
     <title>Home Rececionista</title>
 </head>
 <body>
-Home Rececionista
+Home - Rececionista
+
+<a href="<%= request.getContextPath() %>/rececionista/tutores">Tutores</a>
 
 <a href="<%= request.getContextPath() %>/logout">Logout</a>
 

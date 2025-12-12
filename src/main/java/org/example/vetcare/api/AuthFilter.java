@@ -32,26 +32,9 @@ public class AuthFilter implements Filter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        // rotas públicas
-        boolean isPublic =
-                path.equals("/login") ||
-                        path.equals("/login.jsp") ||
-                        path.startsWith("/css/") ||
-                        path.startsWith("/js/") ||
-                        path.startsWith("/images/");
-
-        if (isPublic) {
-            chain.doFilter(req, res);
-            return;
-        }
 
         HttpSession session = request.getSession(false);
         String role = (session == null) ? null : (String) session.getAttribute("userRole");
-
-        if (role == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
 
         // 3) autorização por "área" (pastas)
         boolean isAllowed =
@@ -65,7 +48,7 @@ public class AuthFilter implements Filter {
                 || path.startsWith("/tutor/") || path.startsWith("/rececionista/");
 
         if (isRoleArea && !isAllowed) {
-            // bloquear com 403
+            // bloquear com 403 e mensagem de erro
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("text/plain; charset=UTF-8");
             response.getWriter().write("404 | Acesso negado: não tens permissões para aceder a esta página.");
