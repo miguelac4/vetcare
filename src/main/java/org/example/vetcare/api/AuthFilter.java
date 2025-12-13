@@ -36,7 +36,7 @@ public class AuthFilter implements Filter {
         HttpSession session = request.getSession(false);
         String role = (session == null) ? null : (String) session.getAttribute("userRole");
 
-        // 3) autorização por "área" (pastas)
+        // autorização por diretorias
         boolean isAllowed =
                 (path.startsWith("/gerente/")      && role.equals("gerente")) ||
                         (path.startsWith("/veterinario/")  && role.equals("veterinario")) ||

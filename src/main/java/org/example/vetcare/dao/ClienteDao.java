@@ -69,4 +69,44 @@ public class ClienteDao {
         return null;
     }
 
+    public void update(Cliente c) {
+        String sql = """
+        UPDATE cliente SET
+            nome = ?,
+            sexo = ?,
+            telefone = ?,
+            email = ?,
+            morada = ?,
+            freguesia = ?,
+            concelho = ?,
+            capitalSocial = ?
+        WHERE nif = ?
+        """;
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, c.getNome());
+            ps.setString(2, c.getSexo());
+            ps.setString(3, c.getTelefone());
+            ps.setString(4, c.getEmail());
+            ps.setString(5, c.getMorada());
+            ps.setString(6, c.getFreguesia());
+            ps.setString(7, c.getConcelho());
+
+            if (c.getCapitalSocial() == null)
+                ps.setNull(8, java.sql.Types.DOUBLE);
+            else
+                ps.setDouble(8, c.getCapitalSocial());
+
+            ps.setString(9, c.getNif());
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

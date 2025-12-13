@@ -2,14 +2,13 @@
 
 ## Rececionista
 
-* [ ] **1.1** Criar/Atualizar dados dos tutores e dos respetivos animais, incluindo fotografia.
+* [X] **1.1** Criar/Atualizar dados dos tutores e dos respetivos animais, incluindo fotografia.
 * [ ] **1.2** Agendar / Cancelar / Reagendar a prestação de serviços veterinários para um determinado animal.
 
 ## Veterinário
 
 * [ ] **2.1** Implementar um controlo *autocomplete* que permita encontrar fichas de animais a partir do nome do tutor.
 * [ ] **2.2** Consultar o registo clínico de um animal incluindo:
-
     * Idade expressa em dias, semanas, meses ou anos;
     * Cálculo da idade com base na data atual ou data de falecimento;
     * Apresentação do escalão etário: bebé, jovem, adulto ou idoso.

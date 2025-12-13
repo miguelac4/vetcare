@@ -72,7 +72,8 @@
         String foto = a.getFotografia();
         if (foto != null && !foto.isBlank()) {
       %>
-      <a href="<%= foto %>" target="_blank">Ver</a>
+      <a href="<%= request.getContextPath() + foto %>" target="_blank">Ver</a>
+      <!-- <br/><img src="<%= request.getContextPath() + foto %>" width="80" /> -->
       <%
       } else {
       %>
@@ -81,6 +82,11 @@
         }
       %>
     </td>
+
+    <td>
+      <a href="<%= request.getContextPath() %>/rececionista/animal/editar?id=<%= a.getIdAnimal() %>">Editar</a>
+    </td>
+
   </tr>
   <%
     }
