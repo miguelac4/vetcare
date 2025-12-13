@@ -39,6 +39,7 @@
     <th>Localidade</th>
     <th>Serviço</th>
     <th>Animal</th>
+    <th>Ações</th>
   </tr>
 
   <%
@@ -47,11 +48,26 @@
   <tr>
     <td><%= a.getIdAgendamento() %></td>
     <td><%= a.getDataHora() == null ? "" : a.getDataHora() %></td>
-    <td><%= a.getEstado() %></td>
-    <td><%= a.getCriadoPor() %></td>
-    <td><%= a.getLocalidade() %></td>
-    <td><%= a.getIdServico() %></td>
-    <td><%= a.getIdAnimal() %></td>
+    <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
+    <td><%= a.getCriadoPor() == null ? "" : a.getCriadoPor() %></td>
+    <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
+    <td><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
+    <td><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
+
+    <td>
+      <a href="<%= request.getContextPath() %>/rececionista/agendamento/reagendar?id=<%= a.getIdAgendamento() %>">
+        Reagendar
+      </a>
+
+      <form action="<%= request.getContextPath() %>/rececionista/agendamento/cancelar"
+            method="post" style="display:inline;">
+        <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>"/>
+        <button type="submit"
+                onclick="return confirm('Cancelar este agendamento?');">
+          Cancelar
+        </button>
+      </form>
+    </td>
   </tr>
   <%
     }

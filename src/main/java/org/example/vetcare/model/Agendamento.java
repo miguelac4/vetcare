@@ -11,6 +11,9 @@ public class Agendamento {
     private int idServico;
     private int idAnimal;
 
+    private String nomeAnimal;
+    private String tipoServico;
+
     public Agendamento() {}
 
     public int getIdAgendamento() { return idAgendamento; }
@@ -33,4 +36,11 @@ public class Agendamento {
 
     public int getIdAnimal() { return idAnimal; }
     public void setIdAnimal(int idAnimal) { this.idAnimal = idAnimal; }
+
+    // Joins nos nomes do animal e serviço, para a listagem
+    public String getNomeAnimal() { return nomeAnimal; }
+    public void setNomeAnimal(String nomeAnimal) { this.nomeAnimal = nomeAnimal; }
+
+    public String getTipoServico() { return tipoServico; }
+    public void setTipoServico(String tipoServico) { this.tipoServico = tipoServico; }
 }
