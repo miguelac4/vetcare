@@ -116,6 +116,30 @@ public class AgendamentoDao {
         return 0;
     }
 
+    public void insert(java.time.LocalDateTime dataHora, String estado, String criadoPor,
+                       String localidade, int idServico, int idAnimal) {
+
+        String sql = "INSERT INTO agendamento (dataHora, estado, criadoPor, localidade, idServico, idAnimal) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setTimestamp(1, Timestamp.valueOf(dataHora));
+            ps.setString(2, estado);
+            ps.setString(3, criadoPor);
+            ps.setString(4, localidade);
+            ps.setInt(5, idServico);
+            ps.setInt(6, idAnimal);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 

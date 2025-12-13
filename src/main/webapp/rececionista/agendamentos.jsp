@@ -22,6 +22,13 @@
 
 <hr/>
 
+<p>
+  <a href="<%= request.getContextPath() %>/rececionista/agendamento/criar">
+    Criar Agendamento
+  </a>
+</p>
+
+
 <%
   List<Agendamento> ags = (List<Agendamento>) request.getAttribute("agendamentos");
   if (ags == null || ags.isEmpty()) {

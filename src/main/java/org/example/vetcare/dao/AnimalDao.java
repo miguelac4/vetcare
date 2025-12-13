@@ -12,6 +12,29 @@ import java.util.List;
 
 public class AnimalDao {
 
+    public List<Animal> findAll() {
+        String sql = "SELECT idAnimal, nome FROM animal ORDER BY nome";
+        List<Animal> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Animal a = new Animal();
+                a.setIdAnimal(rs.getInt("idAnimal"));
+                a.setNome(rs.getString("nome"));
+                list.add(a);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
     public List<Animal> findAllByNif(String nif) {
         String sql = "SELECT * FROM animal WHERE nif = ? ORDER BY nome";
 
