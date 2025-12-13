@@ -15,6 +15,8 @@ Home - Rececionista
 
 <a href="<%= request.getContextPath() %>/rececionista/tutores">Tutores</a>
 
+<a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
+
 <a href="<%= request.getContextPath() %>/logout">Logout</a>
 
 </body>
