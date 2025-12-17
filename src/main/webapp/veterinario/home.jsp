@@ -13,6 +13,11 @@
 <body>
 Home - Veterinario
 
+<a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">
+    Procurar Tutor
+</a>
+
+
 <a href="<%= request.getContextPath() %>/logout">Logout</a>
 </body>
 </html>

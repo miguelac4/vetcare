@@ -30,7 +30,7 @@
 
 <h2>Editar Animal</h2>
 
-<a href="<%= request.getContextPath() %>/rececionista/animais?nif=<%= a.getNif() %>">Voltar</a>
+<a href="<%= request.getContextPath() %>/animais?nif=<%= a.getNif() %>">Voltar</a>
 | <a href="<%= request.getContextPath() %>/logout">Logout</a>
 
 <hr/>

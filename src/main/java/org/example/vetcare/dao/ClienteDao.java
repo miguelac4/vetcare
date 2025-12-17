@@ -35,6 +35,36 @@ public class ClienteDao {
         return list;
     }
 
+    public List<Cliente> searchByNome(String prefixo, int limit) {
+        String sql = "SELECT nif, nome, email FROM cliente " +
+                "WHERE nome LIKE ? ORDER BY nome LIMIT ?";
+
+        List<Cliente> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, prefixo + "%");
+            ps.setInt(2, limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Cliente c = new Cliente();
+                    c.setNif(rs.getString("nif"));
+                    c.setNome(rs.getString("nome"));
+                    c.setEmail(rs.getString("email"));
+                    list.add(c);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
     public Cliente findFichaClientByNif(String nif) {
         String sql = "SELECT * FROM cliente WHERE nif = ?";
 
