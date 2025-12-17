@@ -49,7 +49,7 @@
 <a href="<%= request.getContextPath() %>/rececionista/tutor/editar?nif=<%= c.getNif() %>">Editar Tutor</a>
 
 
-<a href="<%= request.getContextPath() %>/rececionista/animais?nif=<%= c.getNif() %>">Ver Animais</a>
+<a href="<%= request.getContextPath() %>/animais?nif=<%= c.getNif() %>">Ver Animais</a>
 
 <%
   }

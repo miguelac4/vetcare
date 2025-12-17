@@ -141,7 +141,7 @@ public class EditarAnimalServlet extends HttpServlet {
 
         animalDao.update(a);
 
-        response.sendRedirect(request.getContextPath() + "/rececionista/animais?nif=" + nif);
+        response.sendRedirect(request.getContextPath() + "/animais?nif=" + nif);
     }
 
     private void deleteIfExists(Path p) {

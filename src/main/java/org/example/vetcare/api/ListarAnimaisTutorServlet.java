@@ -10,7 +10,7 @@ import org.example.vetcare.model.Animal;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/rececionista/animais")
+@WebServlet("/animais")
 public class ListarAnimaisTutorServlet extends HttpServlet {
 
     private final AnimalDao animalDao = new AnimalDao();
@@ -20,16 +20,34 @@ public class ListarAnimaisTutorServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String nif = request.getParameter("nif");
-
         if (nif == null || nif.isBlank()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "NIF em falta.");
+            response.sendError(400, "NIF em falta.");
             return;
         }
 
-        List<Animal> animais = animalDao.findAllByNif(nif.trim());
-        request.setAttribute("nif", nif.trim());
-        request.setAttribute("animais", animais);
+        HttpSession session = request.getSession(false);
+        String role = session == null ? null : (String) session.getAttribute("userRole");
 
-        request.getRequestDispatcher("/rececionista/animaisTutor.jsp").forward(request, response);
+        if (role == null) {
+            response.sendError(401);
+            return;
+        }
+
+        // apenas roles permitidas
+        if (!role.equals("rececionista") && !role.equals("veterinario")) {
+            response.sendError(403);
+            return;
+        }
+
+        request.setAttribute("nif", nif.trim());
+        request.setAttribute("animais", animalDao.findAllByNif(nif.trim()));
+
+        // escolhe a view conforme a área
+        String jsp = role.equals("rececionista")
+                ? "/rececionista/animaisTutor.jsp"
+                : "/veterinario/animaisTutor.jsp";
+
+        request.getRequestDispatcher(jsp).forward(request, response);
     }
 }
+

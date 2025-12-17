@@ -52,8 +52,8 @@
     </td>
 
     <td>
-      <a href="<%= request.getContextPath() %>/rececionista/animais?nif=<%= c.getNif() %>">
-        Animais
+      <a href="<%= request.getContextPath() %>/animais?nif=<%= c.getNif() %>">Animais</a>
+      Animais
       </a>
     </td>
   </tr>
