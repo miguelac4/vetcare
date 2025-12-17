@@ -3,7 +3,7 @@
 ## Rececionista
 
 * [X] **1.1** Criar/Atualizar dados dos tutores e dos respetivos animais, incluindo fotografia.
-* [ ] **1.2** Agendar / Cancelar / Reagendar a prestação de serviços veterinários para um determinado animal.
+* [X] **1.2** Agendar / Cancelar / Reagendar a prestação de serviços veterinários para um determinado animal.
 
 ## Veterinário
 
