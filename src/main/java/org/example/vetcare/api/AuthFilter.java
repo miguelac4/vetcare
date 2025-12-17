@@ -32,29 +32,51 @@ public class AuthFilter implements Filter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
+        // Rotas públicas (não exigem login)
+        boolean isPublic =
+                path.equals("/login") ||
+                        path.equals("/login.jsp") ||
+                        path.startsWith("/css/") ||
+                        path.startsWith("/js/") ||
+                        path.startsWith("/images/") ||
+                        path.startsWith("/uploads/"); // se estás a servir fotos via servlet /uploads
 
-        HttpSession session = request.getSession(false);
-        String role = (session == null) ? null : (String) session.getAttribute("userRole");
-
-        // autorização por diretorias
-        boolean isAllowed =
-                (path.startsWith("/gerente/")      && role.equals("gerente")) ||
-                        (path.startsWith("/veterinario/")  && role.equals("veterinario")) ||
-                        (path.startsWith("/tutor/")        && role.equals("tutor")) ||
-                        (path.startsWith("/rececionista/") && role.equals("rececionista"));
-
-        // Se não está em nenhuma área protegida, deixa passar (ex.: /listarAnimais, /api/*, etc.)
-        boolean isRoleArea = path.startsWith("/gerente/") || path.startsWith("/veterinario/")
-                || path.startsWith("/tutor/") || path.startsWith("/rececionista/");
-
-        if (isRoleArea && !isAllowed) {
-            // bloquear com 403 e mensagem de erro
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("text/plain; charset=UTF-8");
-            response.getWriter().write("404 | Acesso negado: não tens permissões para aceder a esta página.");
+        if (isPublic) {
+            chain.doFilter(req, res);
             return;
         }
 
+        // Exigir login para tudo o resto
+        HttpSession session = request.getSession(false);
+        String role = (session == null) ? null : (String) session.getAttribute("userRole");
+
+        if (role == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Autorização por diretorias
+        boolean isRoleArea =
+                path.startsWith("/gerente/") ||
+                        path.startsWith("/veterinario/") ||
+                        path.startsWith("/tutor/") ||
+                        path.startsWith("/rececionista/");
+
+        if (isRoleArea) {
+            boolean isAllowed =
+                    (path.startsWith("/gerente/")      && role.equals("gerente")) ||
+                            (path.startsWith("/veterinario/")  && role.equals("veterinario")) ||
+                            (path.startsWith("/tutor/")        && role.equals("tutor")) ||
+                            (path.startsWith("/rececionista/") && role.equals("rececionista"));
+
+            if (!isAllowed) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "Acesso negado: não tens permissões para aceder a esta página.");
+                return;
+            }
+        }
+
+        // Rotas fora das diretorias (ex.: /animais) → já estão protegidas por login
         chain.doFilter(req, res);
     }
 }
