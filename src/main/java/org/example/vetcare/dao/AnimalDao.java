@@ -175,5 +175,63 @@ public class AnimalDao {
         }
     }
 
+    public int insertAndReturnId(Animal a) {
+        String sql = """
+        INSERT INTO animal
+        (nome, raca, sexo, dataNascimento, filiacao, estadoReprodutivo, alergia, cor,
+         fotografia, peso, distintivas, numChip, nif)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """;
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, a.getNome());
+            ps.setString(2, a.getRaca());
+            ps.setString(3, a.getSexo());
+
+            if (a.getDataNascimento() == null) ps.setNull(4, java.sql.Types.DATE);
+            else ps.setDate(4, java.sql.Date.valueOf(a.getDataNascimento()));
+
+            ps.setString(5, a.getFiliacao());
+            ps.setString(6, a.getEstadoReprodutivo());
+            ps.setString(7, a.getAlergia());
+            ps.setString(8, a.getCor());
+
+            // foto pode ficar null nesta fase
+            ps.setString(9, a.getFotografia());
+
+            if (a.getPeso() == null) ps.setNull(10, java.sql.Types.DOUBLE);
+            else ps.setDouble(10, a.getPeso());
+
+            ps.setString(11, a.getDistintivas());
+            ps.setString(12, a.getNumChip());
+            ps.setString(13, a.getNif());
+
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void updateFotografia(int idAnimal, String fotografiaPath) {
+        String sql = "UPDATE animal SET fotografia = ? WHERE idAnimal = ?";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, fotografiaPath);
+            ps.setInt(2, idAnimal);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
