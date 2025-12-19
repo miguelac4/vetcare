@@ -7,7 +7,7 @@
 
 ## Veterinário
 
-* [ ] **2.1** Implementar um controlo *autocomplete* que permita encontrar fichas de animais a partir do nome do tutor.
+* [X] **2.1** Implementar um controlo *autocomplete* que permita encontrar fichas de animais a partir do nome do tutor.
 * [ ] **2.2** Consultar o registo clínico de um animal incluindo:
     * Idade expressa em dias, semanas, meses ou anos;
     * Cálculo da idade com base na data atual ou data de falecimento;
