@@ -34,12 +34,17 @@ public class AuthFilter implements Filter {
 
         // Rotas públicas (não exigem login)
         boolean isPublic =
-                path.equals("/login") ||
+                        path.equals("/") ||
+                        path.equals("/index.jsp") ||
+                        path.equals("/register") ||
+                        path.equals("/register.jsp") ||
+                        path.equals("/login") ||
                         path.equals("/login.jsp") ||
                         path.startsWith("/css/") ||
                         path.startsWith("/js/") ||
                         path.startsWith("/images/") ||
                         path.startsWith("/uploads/"); // se estás a servir fotos via servlet /uploads
+
 
         if (isPublic) {
             chain.doFilter(req, res);

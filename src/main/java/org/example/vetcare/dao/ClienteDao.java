@@ -159,6 +159,51 @@ public class ClienteDao {
         return null;
     }
 
+    public boolean existsByNif(String nif) {
+        String sql = "SELECT 1 FROM cliente WHERE nif = ? LIMIT 1";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nif);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT 1 FROM cliente WHERE email = ? LIMIT 1";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void insertCliente(String nif, String nome, String email, String telefone, String morada) {
+        // Ajusta colunas se a tua tabela cliente tiver NOT NULL noutros campos.
+        String sql = "INSERT INTO cliente (nif, nome, email, telefone, morada) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nif);
+            ps.setString(2, nome);
+            ps.setString(3, email);
+            ps.setString(4, (telefone == null || telefone.isBlank()) ? null : telefone);
+            ps.setString(5, (morada == null || morada.isBlank()) ? null : morada);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }
