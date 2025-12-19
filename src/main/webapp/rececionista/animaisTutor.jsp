@@ -29,6 +29,12 @@
 
 <p><b>NIF:</b> <%= nif == null ? "" : nif %></p>
 
+<p>
+  <a href="<%= request.getContextPath() %>/rececionista/animal/novo?nif=<%= nif %>">
+    Adicionar Animal
+  </a>
+</p>
+
 <%
   if (animais == null || animais.isEmpty()) {
 %>
