@@ -36,4 +36,33 @@ public class UserDao {
         }
         return null;
     }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT 1 FROM utilizador WHERE email = ? LIMIT 1";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void insertTutorUser(String nome, String email, String passwordHash) {
+        String sql = "INSERT INTO utilizador (nome, email, password, role) VALUES (?, ?, ?, 'tutor')";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            ps.setString(2, email);
+            ps.setString(3, passwordHash);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
 }
