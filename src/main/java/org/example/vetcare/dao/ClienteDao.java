@@ -138,5 +138,27 @@ public class ClienteDao {
         }
     }
 
+    public String findNifByEmail(String email) {
+        String sql = "SELECT nif FROM cliente WHERE email = ? LIMIT 1";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nif");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
 
 }

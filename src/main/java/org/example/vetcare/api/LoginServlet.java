@@ -1,6 +1,7 @@
 package org.example.vetcare.api;
 
 import org.example.vetcare.config.PasswordUtil;
+import org.example.vetcare.dao.ClienteDao;
 import org.example.vetcare.dao.UserDao;
 import org.example.vetcare.model.User;
 
@@ -14,6 +15,8 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     private final UserDao userDao = new UserDao();
+    private final ClienteDao clienteDao = new ClienteDao();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,6 +50,19 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("userId", user.getId());
         session.setAttribute("userNome", user.getNome());
         session.setAttribute("userRole", user.getRole());
+
+        if ("tutor".equals(user.getRole())) {
+            String nif = clienteDao.findNifByEmail(email.trim());
+
+            if (nif == null || nif.isBlank()) {
+                request.setAttribute("erro", "Tutor autenticado mas não existe na tabela CLIENTE (email não encontrado).");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+                return;
+            }
+
+            session.setAttribute("userNif", nif.trim());
+        }
+
 
         response.sendRedirect(request.getContextPath() + redirectByRole(user.getRole()));
     }
