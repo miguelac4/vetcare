@@ -196,6 +196,30 @@ public class AgendamentoDao {
         return list;
     }
 
+    public int updateAgendamento(int idAgendamento, java.time.LocalDateTime novaDataHora, String novaLocalidade, int novoIdServico) {
+        String sql = """
+        UPDATE agendamento
+        SET dataHora = ?, localidade = ?, idServico = ?, estado = 'reagendado'
+        WHERE idAgendamento = ?
+        """;
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setTimestamp(1, java.sql.Timestamp.valueOf(novaDataHora));
+            ps.setString(2, novaLocalidade);
+            ps.setInt(3, novoIdServico);
+            ps.setInt(4, idAgendamento);
+
+            return ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
 
 
 
