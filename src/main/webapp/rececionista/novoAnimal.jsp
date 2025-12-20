@@ -50,9 +50,6 @@
   <label>Data de Nascimento:</label><br/>
   <input type="date" name="dataNascimento" /><br/><br/>
 
-  <label>Filiação:</label><br/>
-  <input type="text" name="filiacao" /><br/><br/>
-
   <label>Estado Reprodutivo:</label><br/>
   <input type="text" name="estadoReprodutivo" /><br/><br/>
 
@@ -70,6 +67,9 @@
 
   <label>Nº Chip:</label><br/>
   <input type="text" name="numChip" /><br/><br/>
+
+  <label for="idTaxonomia">Taxonomia (idTaxonomia)</label>
+  <input type="number" name="idTaxonomia" id="idTaxonomia" min="1" />
 
   <label>Fotografia (jpg/png/webp):</label><br/>
   <input type="file" name="fotografia" accept=".jpg,.jpeg,.png,.webp" /><br/><br/>

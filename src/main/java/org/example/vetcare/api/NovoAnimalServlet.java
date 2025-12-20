@@ -69,7 +69,18 @@ public class NovoAnimalServlet extends HttpServlet {
 
         a.setRaca(request.getParameter("raca"));
         a.setSexo(request.getParameter("sexo"));
-        a.setFiliacao(request.getParameter("filiacao"));
+
+        try {
+            a.setIdPai(parseNullableInt(request.getParameter("idPai")));
+            a.setIdMae(parseNullableInt(request.getParameter("idMae")));
+            a.setIdTaxonomia(parseNullableInt(request.getParameter("idTaxonomia")));
+        } catch (NumberFormatException e) {
+            request.setAttribute("erro", "idPai, idMae e idTaxonomia têm de ser números inteiros (ou vazios).");
+            request.setAttribute("nif", nif);
+            request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+            return;
+        }
+
         a.setEstadoReprodutivo(request.getParameter("estadoReprodutivo"));
         a.setAlergia(request.getParameter("alergia"));
         a.setCor(request.getParameter("cor"));
@@ -143,6 +154,13 @@ public class NovoAnimalServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/animais?nif=" + nif.trim());
+    }
+
+    private Integer parseNullableInt(String v) throws NumberFormatException {
+        if (v == null) return null;
+        v = v.trim();
+        if (v.isEmpty()) return null;
+        return Integer.parseInt(v);
     }
 
     private void deleteIfExists(Path p) {

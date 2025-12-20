@@ -37,7 +37,6 @@ public class AnimalDao {
 
     public List<Animal> findAllByNif(String nif) {
         String sql = "SELECT * FROM animal WHERE nif = ? ORDER BY nome";
-
         List<Animal> list = new ArrayList<>();
 
         try (Connection conn = DbConnection.getConnection();
@@ -56,7 +55,10 @@ public class AnimalDao {
                     Date dn = rs.getDate("dataNascimento");
                     a.setDataNascimento(dn == null ? null : dn.toLocalDate());
 
-                    a.setFiliacao(rs.getString("filiacao"));
+                    a.setIdPai(getNullableInt(rs, "idPai"));
+                    a.setIdMae(getNullableInt(rs, "idMae"));
+                    a.setIdTaxonomia(getNullableInt(rs, "idTaxonomia"));
+
                     a.setEstadoReprodutivo(rs.getString("estadoReprodutivo"));
                     a.setAlergia(rs.getString("alergia"));
                     a.setCor(rs.getString("cor"));
@@ -80,6 +82,7 @@ public class AnimalDao {
         return list;
     }
 
+
     public Animal findById(int idAnimal) {
         String sql = "SELECT * FROM animal WHERE idAnimal = ?";
 
@@ -99,7 +102,10 @@ public class AnimalDao {
                     java.sql.Date dn = rs.getDate("dataNascimento");
                     a.setDataNascimento(dn == null ? null : dn.toLocalDate());
 
-                    a.setFiliacao(rs.getString("filiacao"));
+                    a.setIdPai(getNullableInt(rs, "idPai"));
+                    a.setIdMae(getNullableInt(rs, "idMae"));
+                    a.setIdTaxonomia(getNullableInt(rs, "idTaxonomia"));
+
                     a.setEstadoReprodutivo(rs.getString("estadoReprodutivo"));
                     a.setAlergia(rs.getString("alergia"));
                     a.setCor(rs.getString("cor"));
@@ -122,6 +128,7 @@ public class AnimalDao {
         return null;
     }
 
+
     public void update(Animal a) {
         String sql = """
         UPDATE animal SET
@@ -129,7 +136,9 @@ public class AnimalDao {
             raca = ?,
             sexo = ?,
             dataNascimento = ?,
-            filiacao = ?,
+            idPai = ?,
+            idMae = ?,
+            idTaxonomia = ?,
             estadoReprodutivo = ?,
             alergia = ?,
             cor = ?,
@@ -147,26 +156,30 @@ public class AnimalDao {
             ps.setString(2, a.getRaca());
             ps.setString(3, a.getSexo());
 
-            if (a.getDataNascimento() == null)
-                ps.setNull(4, java.sql.Types.DATE);
-            else
-                ps.setDate(4, java.sql.Date.valueOf(a.getDataNascimento()));
+            if (a.getDataNascimento() == null) ps.setNull(4, java.sql.Types.DATE);
+            else ps.setDate(4, java.sql.Date.valueOf(a.getDataNascimento()));
 
-            ps.setString(5, a.getFiliacao());
-            ps.setString(6, a.getEstadoReprodutivo());
-            ps.setString(7, a.getAlergia());
-            ps.setString(8, a.getCor());
+            if (a.getIdPai() == null) ps.setNull(5, java.sql.Types.INTEGER);
+            else ps.setInt(5, a.getIdPai());
 
-            ps.setString(9, a.getFotografia());
+            if (a.getIdMae() == null) ps.setNull(6, java.sql.Types.INTEGER);
+            else ps.setInt(6, a.getIdMae());
 
-            if (a.getPeso() == null)
-                ps.setNull(10, java.sql.Types.DOUBLE);
-            else
-                ps.setDouble(10, a.getPeso());
+            if (a.getIdTaxonomia() == null) ps.setNull(7, java.sql.Types.INTEGER);
+            else ps.setInt(7, a.getIdTaxonomia());
 
-            ps.setString(11, a.getDistintivas());
-            ps.setString(12, a.getNumChip());
-            ps.setInt(13, a.getIdAnimal());
+            ps.setString(8, a.getEstadoReprodutivo());
+            ps.setString(9, a.getAlergia());
+            ps.setString(10, a.getCor());
+            ps.setString(11, a.getFotografia());
+
+            if (a.getPeso() == null) ps.setNull(12, java.sql.Types.DOUBLE);
+            else ps.setDouble(12, a.getPeso());
+
+            ps.setString(13, a.getDistintivas());
+            ps.setString(14, a.getNumChip());
+
+            ps.setInt(15, a.getIdAnimal());
 
             ps.executeUpdate();
 
@@ -175,13 +188,14 @@ public class AnimalDao {
         }
     }
 
+
     public int insertAndReturnId(Animal a) {
         String sql = """
         INSERT INTO animal
-        (nome, raca, sexo, dataNascimento, filiacao, estadoReprodutivo, alergia, cor,
-         fotografia, peso, distintivas, numChip, nif)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """;
+        (nome, raca, sexo, dataNascimento, idPai, idMae, idTaxonomia,
+         estadoReprodutivo, alergia, cor, fotografia, peso, distintivas, numChip, nif)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -193,20 +207,27 @@ public class AnimalDao {
             if (a.getDataNascimento() == null) ps.setNull(4, java.sql.Types.DATE);
             else ps.setDate(4, java.sql.Date.valueOf(a.getDataNascimento()));
 
-            ps.setString(5, a.getFiliacao());
-            ps.setString(6, a.getEstadoReprodutivo());
-            ps.setString(7, a.getAlergia());
-            ps.setString(8, a.getCor());
+            if (a.getIdPai() == null) ps.setNull(5, java.sql.Types.INTEGER);
+            else ps.setInt(5, a.getIdPai());
 
-            // foto pode ficar null nesta fase
-            ps.setString(9, a.getFotografia());
+            if (a.getIdMae() == null) ps.setNull(6, java.sql.Types.INTEGER);
+            else ps.setInt(6, a.getIdMae());
 
-            if (a.getPeso() == null) ps.setNull(10, java.sql.Types.DOUBLE);
-            else ps.setDouble(10, a.getPeso());
+            if (a.getIdTaxonomia() == null) ps.setNull(7, java.sql.Types.INTEGER);
+            else ps.setInt(7, a.getIdTaxonomia());
 
-            ps.setString(11, a.getDistintivas());
-            ps.setString(12, a.getNumChip());
-            ps.setString(13, a.getNif());
+            ps.setString(8, a.getEstadoReprodutivo());
+            ps.setString(9, a.getAlergia());
+            ps.setString(10, a.getCor());
+
+            ps.setString(11, a.getFotografia()); // pode ser null
+
+            if (a.getPeso() == null) ps.setNull(12, java.sql.Types.DOUBLE);
+            else ps.setDouble(12, a.getPeso());
+
+            ps.setString(13, a.getDistintivas());
+            ps.setString(14, a.getNumChip());
+            ps.setString(15, a.getNif());
 
             ps.executeUpdate();
 
@@ -220,6 +241,7 @@ public class AnimalDao {
         return -1;
     }
 
+
     public void updateFotografia(int idAnimal, String fotografiaPath) {
         String sql = "UPDATE animal SET fotografia = ? WHERE idAnimal = ?";
         try (Connection conn = DbConnection.getConnection();
@@ -230,6 +252,11 @@ public class AnimalDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Integer getNullableInt(ResultSet rs, String col) throws Exception {
+        int v = rs.getInt(col);
+        return rs.wasNull() ? null : v;
     }
 
 
