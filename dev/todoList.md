@@ -19,8 +19,8 @@
 
 ## Tutor
 
-* 🚧 **3.1** Consultar ficha e histórico clínicos dos seus animais, incluindo serviços agendados.
-* 🔶 **3.2** Agendar / Reagendar / Rejeitar consultas para os seus animais que já tenham ficha clínica.
+* ✅ **3.1** Consultar ficha e histórico clínicos dos seus animais, incluindo serviços agendados.
+* ✅ **3.2** Agendar / Reagendar / Rejeitar consultas para os seus animais que já tenham ficha clínica.
 
 ## Gerente
 
