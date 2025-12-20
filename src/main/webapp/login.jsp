@@ -33,6 +33,12 @@
 
   <button type="submit">Entrar</button>
 </form>
+
+<p>
+  Ainda não criou a sua conta?
+  <a href="<%= request.getContextPath() %>/register">Create an Account</a>
+</p>
+
 </body>
 </html>
 

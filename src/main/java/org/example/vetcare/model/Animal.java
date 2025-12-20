@@ -10,7 +10,10 @@ public class Animal {
     private String sexo;
 
     private LocalDate dataNascimento;
-    private String filiacao;
+
+    private Integer idPai;
+    private Integer idMae;
+
     private String estadoReprodutivo;
     private String alergia;
     private String cor;
@@ -19,20 +22,23 @@ public class Animal {
     private String distintivas;
     private String numChip;
 
+    private Integer idTaxonomia;
+
     // FK / ligação ao tutor
     private String nif;
 
     public Animal() {}
 
     public Animal(int idAnimal, String nome, String raca, String sexo, LocalDate dataNascimento,
-                  String filiacao, String estadoReprodutivo, String alergia, String cor,
-                  String fotografia, Double peso, String distintivas, String numChip, String nif) {
+                  Integer idPai, Integer idMae, String estadoReprodutivo, String alergia, String cor,
+                  String fotografia, Double peso, String distintivas, String numChip, Integer idTaxonomia, String nif) {
         this.idAnimal = idAnimal;
         this.nome = nome;
         this.raca = raca;
         this.sexo = sexo;
         this.dataNascimento = dataNascimento;
-        this.filiacao = filiacao;
+        this.idPai = idPai;
+        this.idMae = idMae;
         this.estadoReprodutivo = estadoReprodutivo;
         this.alergia = alergia;
         this.cor = cor;
@@ -40,6 +46,7 @@ public class Animal {
         this.peso = peso;
         this.distintivas = distintivas;
         this.numChip = numChip;
+        this.idTaxonomia = idTaxonomia;
         this.nif = nif;
     }
 
@@ -58,8 +65,11 @@ public class Animal {
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-    public String getFiliacao() { return filiacao; }
-    public void setFiliacao(String filiacao) { this.filiacao = filiacao; }
+    public Integer getIdPai() { return idPai; }
+    public void setIdPai(Integer idPai) { this.idPai = idPai; }
+
+    public Integer getIdMae() { return idMae; }
+    public void setIdMae(Integer idMae) { this.idMae = idMae; }
 
     public String getEstadoReprodutivo() { return estadoReprodutivo; }
     public void setEstadoReprodutivo(String estadoReprodutivo) { this.estadoReprodutivo = estadoReprodutivo; }
@@ -81,6 +91,9 @@ public class Animal {
 
     public String getNumChip() { return numChip; }
     public void setNumChip(String numChip) { this.numChip = numChip; }
+
+    public Integer getIdTaxonomia() { return idTaxonomia; }
+    public void setIdTaxonomia(Integer idTaxonomia) { this.idTaxonomia = idTaxonomia; }
 
     public String getNif() { return nif; }
     public void setNif(String nif) { this.nif = nif; }

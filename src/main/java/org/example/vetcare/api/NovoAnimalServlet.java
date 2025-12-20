@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import org.example.vetcare.dao.AnimalDao;
+import org.example.vetcare.dao.TaxonomiaDao;
 import org.example.vetcare.model.Animal;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ import java.nio.file.Paths;
 public class NovoAnimalServlet extends HttpServlet {
 
     private final AnimalDao animalDao = new AnimalDao();
+    private final TaxonomiaDao taxonomiaDao = new TaxonomiaDao();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,8 +42,16 @@ public class NovoAnimalServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("nif", nif.trim());
+        nif = nif.trim();
+
+        request.setAttribute("nif", nif);
+
+        // listas para os dropdowns
+        request.setAttribute("animaisDoTutor", animalDao.findAllByNif(nif));
+        request.setAttribute("taxonomias", taxonomiaDao.findAll());
+
         request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+
     }
 
     @Override
@@ -53,14 +64,14 @@ public class NovoAnimalServlet extends HttpServlet {
         if (role == null) { response.sendError(401); return; }
         if (!role.equals("rececionista")) { response.sendError(403); return; }
 
+
         String nif = request.getParameter("nif");
         String nome = request.getParameter("nome");
 
         if (nif == null || nif.isBlank() || nome == null || nome.isBlank()) {
-            request.setAttribute("erro", "NIF e Nome são obrigatórios.");
-            request.setAttribute("nif", nif);
-            request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+            forwardComErro(request, response, nif, "NIF e Nome são obrigatórios.");
             return;
+
         }
 
         Animal a = new Animal();
@@ -69,7 +80,22 @@ public class NovoAnimalServlet extends HttpServlet {
 
         a.setRaca(request.getParameter("raca"));
         a.setSexo(request.getParameter("sexo"));
-        a.setFiliacao(request.getParameter("filiacao"));
+
+        try {
+            a.setIdPai(parseNullableInt(request.getParameter("idPai")));
+            a.setIdMae(parseNullableInt(request.getParameter("idMae")));
+            a.setIdTaxonomia(parseNullableInt(request.getParameter("idTaxonomia")));
+        } catch (NumberFormatException e) {
+            forwardComErro(request, response, nif, "idPai, idMae e idTaxonomia têm de ser números inteiros (ou vazios).");
+            return;
+        }
+
+        if (a.getIdTaxonomia() == null) {
+            forwardComErro(request, response, nif, "Tem de selecionar uma taxonomia.");
+            return;
+        }
+
+
         a.setEstadoReprodutivo(request.getParameter("estadoReprodutivo"));
         a.setAlergia(request.getParameter("alergia"));
         a.setCor(request.getParameter("cor"));
@@ -81,10 +107,9 @@ public class NovoAnimalServlet extends HttpServlet {
             try {
                 a.setPeso(Double.parseDouble(pesoStr));
             } catch (NumberFormatException e) {
-                request.setAttribute("erro", "Peso inválido.");
-                request.setAttribute("nif", nif);
-                request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+                forwardComErro(request, response, nif, "Peso inválido.");
                 return;
+
             }
         }
 
@@ -93,20 +118,18 @@ public class NovoAnimalServlet extends HttpServlet {
             try {
                 a.setDataNascimento(java.time.LocalDate.parse(data));
             } catch (Exception e) {
-                request.setAttribute("erro", "Data de nascimento inválida.");
-                request.setAttribute("nif", nif);
-                request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+                forwardComErro(request, response, nif, "Data de nascimento inválida.");
                 return;
+
             }
         }
 
         // 1) inserir primeiro (para obter idAnimal)
         int newId = animalDao.insertAndReturnId(a);
         if (newId <= 0) {
-            request.setAttribute("erro", "Erro ao criar animal.");
-            request.setAttribute("nif", nif);
-            request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+            forwardComErro(request, response, nif, "Erro ao criar animal.");
             return;
+
         }
 
         // 2) upload foto (opcional) -> grava e faz update do path
@@ -117,10 +140,9 @@ public class NovoAnimalServlet extends HttpServlet {
             String ext = getExtension(submitted);
 
             if (ext.isBlank()) {
-                request.setAttribute("erro", "Formato de imagem inválido (usa jpg/png/webp).");
-                request.setAttribute("nif", nif);
-                request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+                forwardComErro(request, response, nif, "Formato de imagem inválido (usa jpg/png/webp).");
                 return;
+
             }
 
             String base = System.getProperty("catalina.base");
@@ -145,6 +167,13 @@ public class NovoAnimalServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/animais?nif=" + nif.trim());
     }
 
+    private Integer parseNullableInt(String v) throws NumberFormatException {
+        if (v == null) return null;
+        v = v.trim();
+        if (v.isEmpty()) return null;
+        return Integer.parseInt(v);
+    }
+
     private void deleteIfExists(Path p) {
         try { Files.deleteIfExists(p); } catch (Exception ignored) {}
     }
@@ -159,4 +188,24 @@ public class NovoAnimalServlet extends HttpServlet {
             default -> "";
         };
     }
+
+    private void forwardComErro(HttpServletRequest request, HttpServletResponse response, String nif, String msg)
+            throws ServletException, IOException {
+
+        String nifOk = (nif == null ? "" : nif.trim());
+
+        request.setAttribute("erro", msg);
+        request.setAttribute("nif", nifOk);
+
+        // repor listas para os dropdowns
+        if (!nifOk.isBlank()) {
+            request.setAttribute("animaisDoTutor", animalDao.findAllByNif(nifOk));
+        } else {
+            request.setAttribute("animaisDoTutor", java.util.List.of());
+        }
+        request.setAttribute("taxonomias", taxonomiaDao.findAll());
+
+        request.getRequestDispatcher("/rececionista/novoAnimal.jsp").forward(request, response);
+    }
+
 }

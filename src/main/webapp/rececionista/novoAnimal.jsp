@@ -5,7 +5,15 @@
   Time: 7:16 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.vetcare.model.Animal" %>
+<%@ page import="org.example.vetcare.model.Taxonomia" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  List<Animal> animaisDoTutor = (List<Animal>) request.getAttribute("animaisDoTutor");
+  List<Taxonomia> taxonomias = (List<Taxonomia>) request.getAttribute("taxonomias");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,9 +58,6 @@
   <label>Data de Nascimento:</label><br/>
   <input type="date" name="dataNascimento" /><br/><br/>
 
-  <label>Filiação:</label><br/>
-  <input type="text" name="filiacao" /><br/><br/>
-
   <label>Estado Reprodutivo:</label><br/>
   <input type="text" name="estadoReprodutivo" /><br/><br/>
 
@@ -70,6 +75,77 @@
 
   <label>Nº Chip:</label><br/>
   <input type="text" name="numChip" /><br/><br/>
+
+  <label>Pai:</label><br/>
+  <select name="idPai">
+    <option value="">-- (desconhecido) --</option>
+    <%
+      if (animaisDoTutor != null) {
+        for (Animal an : animaisDoTutor) {
+          if (!"M".equalsIgnoreCase(an.getSexo())) continue;
+    %>
+    <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
+    <%
+        }
+      }
+    %>
+  </select><br/><br/>
+
+
+  <label>Mãe:</label><br/>
+  <select name="idMae">
+    <option value="">-- (desconhecida) --</option>
+    <%
+      if (animaisDoTutor != null) {
+        for (Animal an : animaisDoTutor) {
+          if (!"F".equalsIgnoreCase(an.getSexo())) continue;
+    %>
+    <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
+    <%
+        }
+      }
+    %>
+  </select><br/><br/>
+
+
+  <label>Taxonomia:</label><br/>
+  <select name="idTaxonomia" required>
+    <option value="">-- escolher --</option>
+    <%
+      if (taxonomias != null) {
+        for (Taxonomia t : taxonomias) {
+
+          String especie = t.getEspecie() == null ? "" : t.getEspecie();
+          String raca = t.getRaca() == null ? "" : t.getRaca();
+
+          String labelBase = especie + (raca.isBlank() ? "" : " - " + raca);
+
+          // descrição mais detalhada (curta mas útil)
+          String detalhes =
+                  " | " + (t.getPorte() == null ? "-" : t.getPorte()) +
+                          " | " + (t.getRegimeAlimentar() == null ? "-" : t.getRegimeAlimentar()) +
+                          " | vida: " + (t.getExpetativaVida() == null ? "-" : t.getExpetativaVida()) + " anos" +
+                          " | peso: " + (t.getPeso() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getPeso())) + " kg" +
+                          " | comp: " + (t.getComprimento() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getComprimento())) + " cm";
+
+          // Se quiseres incluir predisposição/cuidados, pode ficar grande — mas dá:
+          String extra = "";
+          if (t.getPredisposicaoGenetica() != null && !t.getPredisposicaoGenetica().isBlank()) {
+            extra += " | gen: " + t.getPredisposicaoGenetica();
+          }
+          if (t.getCuidadosEspeciais() != null && !t.getCuidadosEspeciais().isBlank()) {
+            extra += " | cuidados: " + t.getCuidadosEspeciais();
+          }
+    %>
+    <option value="<%= t.getIdTaxonomia() %>">
+      <%= labelBase + detalhes + extra %>
+    </option>
+    <%
+        }
+      }
+    %>
+  </select><br/><br/>
+
 
   <label>Fotografia (jpg/png/webp):</label><br/>
   <input type="file" name="fotografia" accept=".jpg,.jpeg,.png,.webp" /><br/><br/>
