@@ -1,6 +1,9 @@
 ### Table cliente_agendamento
 
 - Add column idAnimal in ClienteAgendamento
+- Add column numLicensa (do veternario)
+
+### Table Animal
 
 - Add column idTaxonomia in Animal table
 
