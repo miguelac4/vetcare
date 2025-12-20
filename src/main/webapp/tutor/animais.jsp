@@ -89,10 +89,6 @@
             %>
         </td>
 
-        <td>
-            <a href="<%= request.getContextPath() %>/tutor/animal?id=<%= a.getIdAnimal() %>">Ver</a>
-        </td>
-
     </tr>
     <%
         }

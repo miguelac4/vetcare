@@ -16,7 +16,7 @@
 <ul>
     <li><a href="<%= request.getContextPath() %>/animais">Os meus animais</a></li>
 
-    <li><a href="<%= request.getContextPath() %>/tutor/marcacoes">Marcações</a></li>
+    <li><a href="<%= request.getContextPath() %>/tutor/agendamentos">Marcações</a></li>
 
     <li><a href="<%= request.getContextPath() %>/logout">Logout</a></li>
 </ul>
