@@ -5,23 +5,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import org.example.vetcare.dao.AnimalDao;
-import org.example.vetcare.dao.TaxonomiaDao;
 import org.example.vetcare.model.Animal;
-import org.example.vetcare.model.Taxonomia;
 
 import java.io.IOException;
 
-@WebServlet("/veterinario/animal/registro-clinico")
-public class RegistoClinicoAnimalServlet extends HttpServlet {
+@WebServlet("/veterinario/animal/arvore")
+public class ArvoreGenealogicaServlet extends HttpServlet {
 
     private final AnimalDao animalDao = new AnimalDao();
-    private final TaxonomiaDao taxonomiaDao = new TaxonomiaDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // segurança básica: só veterinário (ajusta se quiseres também rececionista)
+        // (opcional) só veterinário
         HttpSession session = request.getSession(false);
         String role = session == null ? null : (String) session.getAttribute("userRole");
         if (role == null) { response.sendError(401); return; }
@@ -43,17 +40,24 @@ public class RegistoClinicoAnimalServlet extends HttpServlet {
             return;
         }
 
-        Taxonomia tax = null;
-        if (animal.getIdTaxonomia() != null) {
-            tax = taxonomiaDao.findById(animal.getIdTaxonomia());
-        }
+        Animal pai = (animal.getIdPai() == null) ? null : animalDao.findById(animal.getIdPai());
+        Animal mae = (animal.getIdMae() == null) ? null : animalDao.findById(animal.getIdMae());
+
+        Animal avoPaterno = (pai == null || pai.getIdPai() == null) ? null : animalDao.findById(pai.getIdPai());
+        Animal avoPaterna = (pai == null || pai.getIdMae() == null) ? null : animalDao.findById(pai.getIdMae());
+
+        Animal avoMaterno = (mae == null || mae.getIdPai() == null) ? null : animalDao.findById(mae.getIdPai());
+        Animal avoMaterna = (mae == null || mae.getIdMae() == null) ? null : animalDao.findById(mae.getIdMae());
 
         request.setAttribute("animal", animal);
-        request.setAttribute("taxonomia", tax);
+        request.setAttribute("pai", pai);
+        request.setAttribute("mae", mae);
 
-        String nif = request.getParameter("nif");
-        request.setAttribute("nif", nif);
+        request.setAttribute("avoPaterno", avoPaterno);
+        request.setAttribute("avoPaterna", avoPaterna);
+        request.setAttribute("avoMaterno", avoMaterno);
+        request.setAttribute("avoMaterna", avoMaterna);
 
-        request.getRequestDispatcher("/veterinario/registoClinicoAnimal.jsp").forward(request, response);
+        request.getRequestDispatcher("/veterinario/arvoreGenealogica.jsp").forward(request, response);
     }
 }

@@ -68,8 +68,17 @@
 
 <h2>Registo Clínico</h2>
 
-<a href="javascript:history.back()">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+<%
+  String nif = (String) request.getAttribute("nif");
+  String voltarUrl = (nif != null && !nif.isBlank())
+          ? (request.getContextPath() + "/animais?nif=" + nif)
+          : (request.getContextPath() + "/veterinario/procurar-tutores");
+%>
+
+<a href="<%= voltarUrl %>">Voltar</a>
+
+
+<a href="<%= request.getContextPath() %>/logout">Logout</a>
 
 <hr/>
 
@@ -97,6 +106,13 @@
   <b>Idade:</b> <%= idadeTxt %><br/>
   <b>Escalão etário:</b> <%= escalao %>
 </p>
+
+<p>
+  <a href="<%= request.getContextPath() %>/veterinario/animal/arvore?id=<%= a.getIdAnimal() %>&nif=<%= nif %>">
+    Ver árvore genealógica
+  </a>
+</p>
+
 
 </body>
 </html>
