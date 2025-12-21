@@ -219,6 +219,59 @@ public class AgendamentoDao {
         }
     }
 
+    public List<Agendamento> findSemVeterinario() {
+
+        String sql = """
+        SELECT
+            ag.idAgendamento,
+            ag.dataHora,
+            ag.estado,
+            ag.criadoPor,
+            ag.localidade,
+            ag.idServico,
+            ag.idAnimal,
+            an.nome AS nomeAnimal,
+            sv.tipo AS tipoServico
+        FROM agendamento ag
+        JOIN animal an ON an.idAnimal = ag.idAnimal
+        JOIN servico sv ON sv.idServico = ag.idServico
+        WHERE ag.numLicenca IS NULL
+        ORDER BY ag.dataHora ASC
+        """;
+
+        List<Agendamento> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Agendamento a = new Agendamento();
+                a.setIdAgendamento(rs.getInt("idAgendamento"));
+
+                Timestamp ts = rs.getTimestamp("dataHora");
+                a.setDataHora(ts == null ? null : ts.toLocalDateTime());
+
+                a.setEstado(rs.getString("estado"));
+                a.setCriadoPor(rs.getString("criadoPor"));
+                a.setLocalidade(rs.getString("localidade"));
+
+                a.setIdServico(rs.getInt("idServico"));
+                a.setIdAnimal(rs.getInt("idAnimal"));
+
+                a.setNomeAnimal(rs.getString("nomeAnimal"));
+                a.setTipoServico(rs.getString("tipoServico"));
+
+                list.add(a);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
 
 

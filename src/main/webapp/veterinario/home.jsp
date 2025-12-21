@@ -13,11 +13,20 @@
 <body>
 Home - Veterinario
 
+<li>
 <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">
     Procurar Tutor
 </a>
+</li>
 
+<li>
+    <a href="<%= request.getContextPath() %>/veterinario/agendamentos/sem-veterinario">
+        Marcações sem veterinário
+    </a>
+</li>
 
+<li>
 <a href="<%= request.getContextPath() %>/logout">Logout</a>
+</li>
 </body>
 </html>
