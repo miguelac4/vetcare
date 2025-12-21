@@ -8,14 +8,14 @@
 ## Veterinário
 
 * ✅ **2.1** Implementar um controlo *autocomplete* que permita encontrar fichas de animais a partir do nome do tutor.
-* 🔶 **2.2 (need idTaxonomia)** Consultar o registo clínico de um animal incluindo:
+* ✅ **2.2** Consultar o registo clínico de um animal incluindo:
     * Idade expressa em dias, semanas, meses ou anos;
     * Cálculo da idade com base na data atual ou data de falecimento;
     * Apresentação do escalão etário: bebé, jovem, adulto ou idoso.
-* 🔶 **2.3 (filiacao to be an idAnimal)** Visualizar a árvore genealógica de um animal.
-* 🔶 **2.4 (need column numLicensa)** Obter a lista de chamada (data-hora) dos animais com agendamento de serviços sob a sua supervisão.
-* 🔶 **2.5 (need column numLicensa)** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
-* 🔶 **2.6 (need column numLicensa)** Agendar / Cancelar a prestação de serviços veterinários.
+* 🔶 **2.3** Visualizar a árvore genealógica de um animal.
+* 🔶 **2.4** Obter a lista de chamada (data-hora) dos animais com agendamento de serviços sob a sua supervisão.
+* 🔶 **2.5** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
+* 🔶 **2.6** Agendar / Cancelar a prestação de serviços veterinários.
 
 ## Tutor
 

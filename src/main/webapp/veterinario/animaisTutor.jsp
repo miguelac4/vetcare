@@ -82,6 +82,11 @@
         }
       %>
     </td>
+
+    <td>
+      <a href="<%= request.getContextPath() %>/veterinario/animal/registro-clinico?id=<%= a.getIdAnimal() %>">Registo Clínico</a>
+    </td>
+
   </tr>
   <%
     }

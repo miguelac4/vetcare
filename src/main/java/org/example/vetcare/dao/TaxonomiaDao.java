@@ -61,4 +61,30 @@ public class TaxonomiaDao {
 
         return list;
     }
+
+    public Taxonomia findById(int idTaxonomia) {
+        String sql = "SELECT * FROM taxonomia WHERE idTaxonomia = ?";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idTaxonomia);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Taxonomia t = new Taxonomia();
+                    t.setIdTaxonomia(rs.getInt("idTaxonomia"));
+                    t.setEspecie(rs.getString("especie"));
+                    t.setRaca(rs.getString("raca"));
+                    // se tiveres mais campos, preenche também
+                    return t;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
