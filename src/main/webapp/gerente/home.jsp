@@ -13,6 +13,11 @@
 <body>
 Home - Gerente
 
-<a href="<%= request.getContextPath() %>/logout">Logout</a>
+<li><a href="<%= request.getContextPath() %>/gerente/utilizadores">Utilizadores</a></li>
+
+<li>
+    <a href="<%= request.getContextPath() %>/logout">Logout</a>
+</li>
+
 </body>
 </html>
