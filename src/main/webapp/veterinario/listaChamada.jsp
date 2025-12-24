@@ -60,11 +60,22 @@
         <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
         <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
         <td>
+            <!-- Histórico Clínic -->
+            <form method="get" action="<%= request.getContextPath() %>/veterinario/historico-clinico" style="margin:0;">
+                <input type="hidden" name="idAnimal" value="<%= a.getIdAnimal() %>"/>
+                <button type="submit">Atualizar histórico</button>
+            </form>
+
+
+            <br/><br/>
+
+            <!-- Desassumir -->
             <form method="post" action="<%= request.getContextPath() %>/veterinario/agendamentos/desassumir" style="margin:0;">
                 <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>"/>
                 <button type="submit">Desassumir</button>
             </form>
         </td>
+
 
     </tr>
     <% } %>
