@@ -23,7 +23,8 @@ public class ListarVeterinariosServlet extends HttpServlet {
         if (role == null) { response.sendError(401); return; }
         if (!"gerente".equals(role)) { response.sendError(403); return; }
 
-        request.setAttribute("veterinarios", userDao.findByRole("veterinario")); // <- confirma o texto do role
+        request.setAttribute("veterinarios", userDao.findVeterinariosComLicenca());
         request.getRequestDispatcher("/gerente/veterinarios.jsp").forward(request, response);
+
     }
 }

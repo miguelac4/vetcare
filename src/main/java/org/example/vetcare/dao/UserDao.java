@@ -2,6 +2,7 @@ package org.example.vetcare.dao;
 
 import org.example.vetcare.config.DbConnection;
 import org.example.vetcare.model.User;
+import org.example.vetcare.model.Veterinario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,6 +86,37 @@ public class UserDao {
                     u.setRole(rs.getString("role"));
                     list.add(u);
                 }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<Veterinario> findVeterinariosComLicenca() {
+        String sql = """
+        SELECT u.id, u.nome, u.email, v.numLicenca
+        FROM utilizador u
+        LEFT JOIN veterinario v ON v.email = u.email
+        WHERE u.role = 'veterinario'
+        ORDER BY u.nome
+    """;
+
+        List<Veterinario> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Veterinario v = new Veterinario();
+                v.setId(rs.getInt("id"));
+                v.setNome(rs.getString("nome"));
+                v.setEmail(rs.getString("email"));
+                v.setNumLicenca(rs.getString("numLicenca")); // pode ser null
+                list.add(v);
             }
 
         } catch (Exception e) {
