@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Miguel
-  Date: 12/21/2025
-  Time: 6:01 PM
+  User: Miguel Cordeiro
+  Date: 12/24/2025
+  Time: 12:01 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -17,15 +17,13 @@
     DateTimeFormatter dfHora = DateTimeFormatter.ofPattern("HH:mm");
 %>
 
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Marcações sem veterinário</title>
+    <title>Lista de Chamada</title>
 </head>
 <body>
 
-<h2>Marcações sem veterinário</h2>
+<h2>Lista de Chamada (por data/hora)</h2>
 
 <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Voltar</a>
 | <a href="<%= request.getContextPath() %>/logout">Logout</a>
@@ -33,19 +31,18 @@
 <hr/>
 
 <% if (ags == null || ags.isEmpty()) { %>
-<p>Não existem marcações sem veterinário.</p>
+<p>Não existem agendamentos atribuídos a si.</p>
 <% } else { %>
 
 <table border="1" cellpadding="6" cellspacing="0">
     <tr>
-        <th>ID</th>
         <th>Data</th>
         <th>Hora</th>
+        <th>ID</th>
         <th>Animal</th>
         <th>Serviço</th>
         <th>Localidade</th>
         <th>Estado</th>
-        <th>Criado por</th>
         <th>Ações</th>
     </tr>
 
@@ -55,20 +52,30 @@
         String hora = (dt == null) ? "" : dt.format(dfHora);
     %>
     <tr>
-        <td><%= a.getIdAgendamento() %></td>
         <td><%= data %></td>
         <td><%= hora %></td>
+        <td><%= a.getIdAgendamento() %></td>
         <td><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
         <td><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
         <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
         <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
-        <td><%= a.getCriadoPor() == null ? "" : a.getCriadoPor() %></td>
         <td>
-            <form method="post" action="<%= request.getContextPath() %>/veterinario/agendamentos/assumir" style="margin:0;">
-                <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>" />
-                <button type="submit">Assumir</button>
+            <!-- Histórico Clínic -->
+            <form method="get" action="<%= request.getContextPath() %>/veterinario/historico-clinico" style="margin:0;">
+                <input type="hidden" name="idAnimal" value="<%= a.getIdAnimal() %>"/>
+                <button type="submit">Atualizar histórico</button>
+            </form>
+
+
+            <br/><br/>
+
+            <!-- Desassumir -->
+            <form method="post" action="<%= request.getContextPath() %>/veterinario/agendamentos/desassumir" style="margin:0;">
+                <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>"/>
+                <button type="submit">Desassumir</button>
             </form>
         </td>
+
 
     </tr>
     <% } %>
@@ -78,4 +85,3 @@
 
 </body>
 </html>
-

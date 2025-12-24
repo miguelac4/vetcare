@@ -1,5 +1,11 @@
 # To‑Do List – Sistema de Clínica Veterinária
 
+## Login
+* ✅ **E.1** Index Page
+* ✅ **E.2** Login
+* ✅ **E.3** Logout
+* ✅ **E.4** Register
+
 ## Rececionista
 
 * ✅ **1.1** Criar/Atualizar dados dos tutores e dos respetivos animais, incluindo fotografia.
@@ -13,9 +19,9 @@
     * Cálculo da idade com base na data atual ou data de falecimento;
     * Apresentação do escalão etário: bebé, jovem, adulto ou idoso.
 * ✅ **2.3** Visualizar a árvore genealógica de um animal.
-* 🚧 **2.4 (need email on veternario table)** Obter a lista de chamada (data-hora) dos animais com agendamento de serviços sob a sua supervisão.
-* 🚧 **2.5 (need email on veternario table)** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
-* 🚧 **2.6 (need email on veternario table)** Agendar / Cancelar a prestação de serviços veterinários.
+* ✅ **2.4** Obter a lista de chamada (data-hora) dos animais com agendamento de serviços sob a sua supervisão.
+* 🚧 **2.5** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
+* ✅ **2.6** Agendar / Cancelar a prestação de serviços veterinários.
 
 ## Tutor
 
