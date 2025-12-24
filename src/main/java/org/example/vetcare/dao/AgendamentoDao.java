@@ -273,6 +273,21 @@ public class AgendamentoDao {
     }
 
 
+    public int assignVeterinarioIfNull(int idAgendamento, String numLicenca) {
+        String sql = "UPDATE agendamento SET numLicenca = ? WHERE idAgendamento = ? AND numLicenca IS NULL";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, numLicenca);
+            ps.setInt(2, idAgendamento);
+            return ps.executeUpdate(); // 1 = sucesso, 0 = alguém já assumiu
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 
 

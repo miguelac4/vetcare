@@ -46,6 +46,7 @@
         <th>Localidade</th>
         <th>Estado</th>
         <th>Criado por</th>
+        <th>Ações</th>
     </tr>
 
     <% for (Agendamento a : ags) {
@@ -62,6 +63,13 @@
         <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
         <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
         <td><%= a.getCriadoPor() == null ? "" : a.getCriadoPor() %></td>
+        <td>
+            <form method="post" action="<%= request.getContextPath() %>/veterinario/agendamentos/assumir" style="margin:0;">
+                <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>" />
+                <button type="submit">Assumir</button>
+            </form>
+        </td>
+
     </tr>
     <% } %>
 </table>

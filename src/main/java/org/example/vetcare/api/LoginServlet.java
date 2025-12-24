@@ -50,6 +50,7 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("userId", user.getId());
         session.setAttribute("userNome", user.getNome());
         session.setAttribute("userRole", user.getRole());
+        session.setAttribute("userEmail", user.getEmail());
 
         if ("tutor".equals(user.getRole())) {
             String nif = clienteDao.findNifByEmail(email.trim());
