@@ -23,6 +23,7 @@
   <nav class="nav">
     <a href="<%= request.getContextPath() %>/gerente/home.jsp">Home</a>
     <a href="<%= request.getContextPath() %>/gerente/utilizadores">Utilizadores</a>
+    <a href="<%= request.getContextPath() %>/gerente/animais">Animais</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
 </header>
@@ -46,6 +47,10 @@
       <a class="btn btn-primary"
          href="<%= request.getContextPath() %>/gerente/utilizadores">
         Gerir Utilizadores
+      </a>
+      <a class="btn btn-primary"
+         href="<%= request.getContextPath() %>/gerente/animais">
+        Animais
       </a>
     </div>
   </section>

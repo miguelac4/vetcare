@@ -47,6 +47,11 @@
         href="<%= request.getContextPath() %>/veterinario/agendamentos/sem-veterinario">
           Marcações sem veterinário
       </a>
+
+      <a class="btn btn-secondary"
+         href="<%= request.getContextPath() %>/veterinario/lista-chamada">
+        Lista de Chamada
+      </a>
     </div>
   </section>
 </main>
