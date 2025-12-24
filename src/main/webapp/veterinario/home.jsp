@@ -26,6 +26,12 @@ Home - Veterinario
 </li>
 
 <li>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">
+        Lista de Chamada
+    </a>
+</li>
+
+<li>
 <a href="<%= request.getContextPath() %>/logout">Logout</a>
 </li>
 </body>

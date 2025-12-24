@@ -196,6 +196,68 @@ public class AgendamentoDao {
         return list;
     }
 
+    public List<Agendamento> findAgendamentosByNumLicenca(String numLicenca) {
+
+        String sql = """
+    SELECT
+        ag.idAgendamento,
+        ag.dataHora,
+        ag.estado,
+        ag.criadoPor,
+        ag.localidade,
+        ag.idServico,
+        ag.idAnimal,
+        ag.numLicenca,
+        an.nome AS nomeAnimal,
+        sv.tipo AS tipoServico
+    FROM agendamento ag
+    JOIN animal an ON an.idAnimal = ag.idAnimal
+    JOIN servico sv ON sv.idServico = ag.idServico
+    WHERE ag.numLicenca = ?
+    ORDER BY ag.dataHora ASC
+    """;
+
+        List<Agendamento> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, numLicenca);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Agendamento a = new Agendamento();
+
+                    a.setIdAgendamento(rs.getInt("idAgendamento"));
+
+                    Timestamp ts = rs.getTimestamp("dataHora");
+                    a.setDataHora(ts == null ? null : ts.toLocalDateTime());
+
+                    a.setEstado(rs.getString("estado"));
+                    a.setCriadoPor(rs.getString("criadoPor"));
+                    a.setLocalidade(rs.getString("localidade"));
+
+                    a.setIdServico(rs.getInt("idServico"));
+                    a.setIdAnimal(rs.getInt("idAnimal"));
+
+                    a.setNomeAnimal(rs.getString("nomeAnimal"));
+                    a.setTipoServico(rs.getString("tipoServico"));
+
+                    // se já adicionaste numLicenca ao model:
+                    // a.setNumLicenca(rs.getString("numLicenca"));
+
+                    list.add(a);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
     public int updateAgendamento(int idAgendamento, java.time.LocalDateTime novaDataHora, String novaLocalidade, int novoIdServico) {
         String sql = """
         UPDATE agendamento
@@ -288,6 +350,23 @@ public class AgendamentoDao {
         }
         return 0;
     }
+
+    public int unassignVeterinario(int idAgendamento, String numLicenca) {
+        String sql = "UPDATE agendamento SET numLicenca = NULL WHERE idAgendamento = ? AND numLicenca = ?";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idAgendamento);
+            ps.setString(2, numLicenca);
+            return ps.executeUpdate(); // 1 = ok, 0 = não era dele / já estava null
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 
 
