@@ -17,67 +17,106 @@
   List<Clinica> clinicas = (List<Clinica>) request.getAttribute("clinicas");
 
   String dataHoraValue = "";
-  if (ag.getDataHora() != null) {
+  if (ag != null && ag.getDataHora() != null) {
     dataHoraValue = ag.getDataHora().toString();
     if (dataHoraValue.length() >= 16) dataHoraValue = dataHoraValue.substring(0,16);
   }
 %>
 
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <title>Reagendar Agendamento</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Reagendar</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/rececionista/home.jsp">🐾 vetCare</a>
 
-<h2>Reagendar Agendamento</h2>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/rececionista/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
+</header>
 
-<a href="<%= request.getContextPath() %>/rececionista/agendamentos">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Reagendar Agendamento</h1>
+      <p class="muted">Atualiza data/hora, clínica e serviço</p>
+    </div>
 
-<hr/>
+    <div class="page-actions">
+      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/rececionista/agendamentos">← Voltar</a>
+    </div>
+  </section>
 
-<form method="post" action="<%= request.getContextPath() %>/rececionista/agendamento/reagendar">
-  <input type="hidden" name="idAgendamento" value="<%= ag.getIdAgendamento() %>"/>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Dados</h2>
+      <p class="muted">Ao guardar, o agendamento fica como “reagendado”.</p>
+    </div>
 
-  Data/Hora:
-  <input type="datetime-local" name="dataHora" value="<%= dataHoraValue %>" required />
-  <br/><br/>
+    <form method="post" action="<%= request.getContextPath() %>/rececionista/agendamento/reagendar">
+      <input type="hidden" name="idAgendamento" value="<%= ag == null ? "" : ag.getIdAgendamento() %>"/>
 
-  Localidade:
-  <select name="localidade" required>
-    <option value="">-- selecionar --</option>
-    <%
-      for (Clinica c : clinicas) {
-        String loc = c.getLocalidade();
-        String selected = (loc != null && loc.equals(ag.getLocalidade())) ? "selected" : "";
-    %>
-    <option value="<%= loc %>" <%= selected %>><%= loc %></option>
-    <%
-      }
-    %>
-  </select>
+      <div style="display:grid; gap:12px; max-width: 720px;">
+        <div>
+          <label style="font-weight:900;">Data/Hora</label>
+          <input class="input" type="datetime-local" name="dataHora" value="<%= dataHoraValue %>" required />
+        </div>
 
-  <br/><br/>
+        <div>
+          <label style="font-weight:900;">Localidade</label>
+          <select class="input" name="localidade" required>
+            <option value="">-- selecionar --</option>
+            <%
+              if (clinicas != null && ag != null) {
+                for (Clinica c : clinicas) {
+                  String loc = c.getLocalidade();
+                  String selected = (loc != null && loc.equals(ag.getLocalidade())) ? "selected" : "";
+            %>
+              <option value="<%= loc %>" <%= selected %>><%= loc %></option>
+            <%
+                }
+              }
+            %>
+          </select>
+        </div>
 
+        <div>
+          <label style="font-weight:900;">Serviço</label>
+          <select class="input" name="idServico" required>
+            <option value="">-- selecionar --</option>
+            <%
+              if (servicos != null && ag != null) {
+                for (Servico s : servicos) {
+                  String selected = (s.getIdServico() == ag.getIdServico()) ? "selected" : "";
+            %>
+              <option value="<%= s.getIdServico() %>" <%= selected %>><%= s.getTipo() %></option>
+            <%
+                }
+              }
+            %>
+          </select>
+        </div>
 
-  Serviço:
-  <select name="idServico" required>
-    <option value="">-- selecionar --</option>
-    <%
-      for (Servico s : servicos) {
-        String selected = (s.getIdServico() == ag.getIdServico()) ? "selected" : "";
-    %>
-    <option value="<%= s.getIdServico() %>" <%= selected %>>
-      <%= s.getTipo() %>
-    </option>
-    <%
-      }
-    %>
-  </select>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Guardar</button>
+          <a class="btn btn-secondary" href="<%= request.getContextPath() %>/rececionista/agendamentos">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
 
-  <br/><br/>
-  <button type="submit">Guardar (fica Reagendado)</button>
-</form>
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>

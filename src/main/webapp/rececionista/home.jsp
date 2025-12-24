@@ -1,23 +1,53 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Miguel Cordeiro
-  Date: 12/12/2025
-  Time: 3:07 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-    <title>Home Rececionista</title>
+  <meta charset="UTF-8">
+  <title>VetCare — Rececionista</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
-Home - Rececionista
+<header class="topbar">
+  <span class="logo">🐾 vetCare</span>
 
-<a href="<%= request.getContextPath() %>/utilizadores/tutores">Tutores</a>
+  <nav class="nav">
+    <a href="#">Home</a>
+    <a href="<%= request.getContextPath() %>/logout" class="nav-logout">Sair</a>
+  </nav>
+</header>
 
-<a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Home — Rececionista</h1>
+      <p class="muted">Gestão de clientes e agendamentos</p>
+    </div>
+  </section>
 
-<a href="<%= request.getContextPath() %>/logout">Logout</a>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Ações rápidas</h2>
+      <p class="muted">Acesso às principais funcionalidades</p>
+    </div>
 
+    <div class="actions">
+      <a class="btn btn-primary"
+        href="<%= request.getContextPath() %>/utilizadores/tutores">
+          Tutores
+      </a>
+
+      <a class="btn btn-secondary"
+       href="<%= request.getContextPath() %>/rececionista/agendamentos">
+        Agendamentos
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+    © 2025 VetCare — Sistema de Gestão
+</footer>
 </body>
 </html>

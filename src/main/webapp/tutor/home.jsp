@@ -1,24 +1,53 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Miguel Cordeiro
-  Date: 12/12/2025
-  Time: 3:07 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-    <title>Home Tutor</title>
+    <meta charset="UTF-8">
+    <title>VetCare — Tutor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
-<h2>Home - Tutor</h2>
+<header class="topbar">
+    <span class="logo">🐾 vetCare</span>
 
-<ul>
-    <li><a href="<%= request.getContextPath() %>/animais">Os meus animais</a></li>
+    <nav class="nav">
+        <a href="#">Home</a>
+        <a href="<%= request.getContextPath() %>/logout" class="nav-logout">Sair</a>
+    </nav>
+</header>
 
-    <li><a href="<%= request.getContextPath() %>/tutor/agendamentos">Marcações</a></li>
+<main class="content">
+    <section class="page-head">
+        <div>
+            <h1>Home — Tutor</h1>
+            <p class="muted">Gestão dos seus animais e marcações</p>
+        </div>
+    </section>
 
-    <li><a href="<%= request.getContextPath() %>/logout">Logout</a></li>
-</ul>
+    <section class="panel">
+        <div class="panel-head">
+            <h2>As minhas opções</h2>
+            <p class="muted">Acesso rápido</p>
+        </div>
+
+        <div class="actions">
+            <a class="btn btn-primary"
+               href="<%= request.getContextPath() %>/animais">
+                Os meus animais
+            </a>
+
+            <a class="btn btn-secondary"
+               href="<%= request.getContextPath() %>/tutor/agendamentos">
+                Marcações
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    © 2025 VetCare — Sistema de Gestão
+</footer>
 </body>
 </html>

@@ -1,0 +1,317 @@
+/* =========================
+   VetCare UI — Mobile + Desktop
+   ========================= */
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+:root{
+  --primary: #2f9e88;
+  --primary-dark: #238b78;
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --border: #e9ecef;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  --radius: 16px;
+  --container: 1100px;
+}
+
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- Topbar ---------- */
+.topbar{
+  background: linear-gradient(90deg, var(--primary), #33b39b);
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column; /* mobile */
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.logo{
+  color: #fff;
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  font-size: 1.1rem;
+}
+
+.nav{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav a{
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.14);
+  transition: transform .06s ease, background .15s ease;
+}
+
+.nav a:hover{
+  background: rgba(255,255,255,0.22);
+}
+
+.nav a:active{
+  transform: translateY(1px);
+}
+
+.nav-logout{
+  background: rgba(0,0,0,0.18) !important;
+}
+
+/* ---------- Content ---------- */
+.content{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 18px 14px 28px;
+}
+
+h1{
+  font-size: 1.55rem;
+  margin: 0 0 6px;
+}
+
+h2{
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.muted{
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---------- Page header ---------- */
+.page-head{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+
+.page-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Panels ---------- */
+.panel{
+  margin-top: 16px;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.panel-head{
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Cards (Dashboard) ---------- */
+.cards{
+  display: grid;
+  grid-template-columns: 1fr; /* mobile */
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.card{
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.card-title{
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.card-hint{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.big-number{
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: var(--primary);
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  transition: transform .06s ease, filter .15s ease;
+}
+
+.btn:active{ transform: translateY(1px); }
+
+.btn-primary{
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover{
+  filter: brightness(0.97);
+}
+
+.btn-secondary{
+  background: #e7f5ff;
+  color: #0b5ed7;
+}
+
+.btn-sm{
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+/* ---------- Table ---------- */
+.table{
+  width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-collapse: collapse;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.table th, .table td{
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th{
+  background: #f1f3f5;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.col-actions{ width: 160px; }
+.td-actions{ white-space: nowrap; }
+
+/* ---------- Mobile table -> cards ---------- */
+@media (max-width: 899px){
+  .table thead{ display: none; }
+
+  .table, .table tbody, .table tr, .table td{
+    display: block;
+    width: 100%;
+  }
+
+  .table tr{
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table td{
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 8px 0;
+    border: none;
+  }
+
+  .table td::before{
+    content: attr(data-label);
+    font-weight: 900;
+    color: var(--muted);
+  }
+
+  .td-actions{
+    justify-content: flex-end;
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 900px){
+  .topbar{
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cards{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 14px 28px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Inputs / links ---------- */
+.input{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  outline: none;
+  font-weight: 700;
+}
+
+.input:focus{
+  border-color: rgba(47,158,136,.55);
+  box-shadow: 0 0 0 4px rgba(47,158,136,.12);
+}
+
+.link{
+  color: var(--primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.link:hover{
+  text-decoration: underline;
+}
+
