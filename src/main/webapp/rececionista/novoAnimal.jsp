@@ -9,151 +9,212 @@
 <%@ page import="org.example.vetcare.model.Animal" %>
 <%@ page import="org.example.vetcare.model.Taxonomia" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%
   List<Animal> animaisDoTutor = (List<Animal>) request.getAttribute("animaisDoTutor");
   List<Taxonomia> taxonomias = (List<Taxonomia>) request.getAttribute("taxonomias");
-%>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Novo Animal</title>
-</head>
-<body>
-
-<h2>Adicionar Animal</h2>
-
-<%
-  String erro = (String) request.getAttribute("erro");
-  if (erro != null) {
-%>
-<p style="color:red;"><%= erro %></p>
-<%
-  }
   String nif = (String) request.getAttribute("nif");
 %>
 
-<p><b>NIF do Tutor:</b> <%= nif == null ? "" : nif %></p>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Novo Animal</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
+</head>
 
-<form method="post"
-      action="<%= request.getContextPath() %>/rececionista/animal/novo"
-      enctype="multipart/form-data">
+<body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/rececionista/home.jsp">🐾 vetCare</a>
 
-  <input type="hidden" name="nif" value="<%= nif == null ? "" : nif %>"/>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/rececionista/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/rececionista/tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
+</header>
 
-  <label>Nome:</label><br/>
-  <input type="text" name="nome" required /><br/><br/>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Adicionar Animal</h1>
+      <p class="muted">Tutor (NIF): <strong><%= nif == null ? "" : nif %></strong></p>
+    </div>
 
-  <label>Raça:</label><br/>
-  <input type="text" name="raca" /><br/><br/>
+    <div class="page-actions">
+      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/animais?nif=<%= nif %>">← Voltar</a>
+    </div>
+  </section>
 
-  <label>Sexo:</label><br/>
-  <select name="sexo">
-    <option value="">--</option>
-    <option value="M">M</option>
-    <option value="F">F</option>
-  </select><br/><br/>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Dados do Animal</h2>
+      <p class="muted">Preenche o mínimo necessário e guarda</p>
+    </div>
 
-  <label>Data de Nascimento:</label><br/>
-  <input type="date" name="dataNascimento" /><br/><br/>
-
-  <label>Estado Reprodutivo:</label><br/>
-  <input type="text" name="estadoReprodutivo" /><br/><br/>
-
-  <label>Alergia:</label><br/>
-  <input type="text" name="alergia" /><br/><br/>
-
-  <label>Cor:</label><br/>
-  <input type="text" name="cor" /><br/><br/>
-
-  <label>Peso (kg):</label><br/>
-  <input type="text" name="peso" /><br/><br/>
-
-  <label>Características distintivas:</label><br/>
-  <input type="text" name="distintivas" /><br/><br/>
-
-  <label>Nº Chip:</label><br/>
-  <input type="text" name="numChip" /><br/><br/>
-
-  <label>Pai:</label><br/>
-  <select name="idPai">
-    <option value="">-- (desconhecido) --</option>
     <%
-      if (animaisDoTutor != null) {
-        for (Animal an : animaisDoTutor) {
-          if (!"M".equalsIgnoreCase(an.getSexo())) continue;
+      String erro = (String) request.getAttribute("erro");
+      if (erro != null) {
     %>
-    <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
+      <div class="panel" style="border-color:#ffd6d6; background:#fff5f5; box-shadow:none; margin-top:10px;">
+        <p style="margin:0; font-weight:900; color:#c92a2a;"><%= erro %></p>
+      </div>
     <%
-        }
       }
     %>
-  </select><br/><br/>
 
+    <form method="post"
+          action="<%= request.getContextPath() %>/rececionista/animal/novo"
+          enctype="multipart/form-data"
+          style="margin-top:14px;">
 
-  <label>Mãe:</label><br/>
-  <select name="idMae">
-    <option value="">-- (desconhecida) --</option>
-    <%
-      if (animaisDoTutor != null) {
-        for (Animal an : animaisDoTutor) {
-          if (!"F".equalsIgnoreCase(an.getSexo())) continue;
-    %>
-    <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
-    <%
-        }
-      }
-    %>
-  </select><br/><br/>
+      <input type="hidden" name="nif" value="<%= nif == null ? "" : nif %>"/>
 
+      <div style="display:grid; gap:12px; max-width: 820px;">
+        <div>
+          <label style="font-weight:900;">Nome</label>
+          <input class="input" type="text" name="nome" required />
+        </div>
 
-  <label>Taxonomia:</label><br/>
-  <select name="idTaxonomia" required>
-    <option value="">-- escolher --</option>
-    <%
-      if (taxonomias != null) {
-        for (Taxonomia t : taxonomias) {
+        <div>
+          <label style="font-weight:900;">Raça</label>
+          <input class="input" type="text" name="raca" />
+        </div>
 
-          String especie = t.getEspecie() == null ? "" : t.getEspecie();
-          String raca = t.getRaca() == null ? "" : t.getRaca();
+        <div>
+          <label style="font-weight:900;">Sexo</label>
+          <select class="input" name="sexo">
+            <option value="">--</option>
+            <option value="M">M</option>
+            <option value="F">F</option>
+          </select>
+        </div>
 
-          String labelBase = especie + (raca.isBlank() ? "" : " - " + raca);
+        <div>
+          <label style="font-weight:900;">Data de Nascimento</label>
+          <input class="input" type="date" name="dataNascimento" />
+        </div>
 
-          // descrição mais detalhada (curta mas útil)
-          String detalhes =
-                  " | " + (t.getPorte() == null ? "-" : t.getPorte()) +
-                          " | " + (t.getRegimeAlimentar() == null ? "-" : t.getRegimeAlimentar()) +
-                          " | vida: " + (t.getExpetativaVida() == null ? "-" : t.getExpetativaVida()) + " anos" +
-                          " | peso: " + (t.getPeso() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getPeso())) + " kg" +
-                          " | comp: " + (t.getComprimento() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getComprimento())) + " cm";
+        <div>
+          <label style="font-weight:900;">Estado Reprodutivo</label>
+          <input class="input" type="text" name="estadoReprodutivo" />
+        </div>
 
-          // Se quiseres incluir predisposição/cuidados, pode ficar grande — mas dá:
-          String extra = "";
-          if (t.getPredisposicaoGenetica() != null && !t.getPredisposicaoGenetica().isBlank()) {
-            extra += " | gen: " + t.getPredisposicaoGenetica();
-          }
-          if (t.getCuidadosEspeciais() != null && !t.getCuidadosEspeciais().isBlank()) {
-            extra += " | cuidados: " + t.getCuidadosEspeciais();
-          }
-    %>
-    <option value="<%= t.getIdTaxonomia() %>">
-      <%= labelBase + detalhes + extra %>
-    </option>
-    <%
-        }
-      }
-    %>
-  </select><br/><br/>
+        <div>
+          <label style="font-weight:900;">Alergia</label>
+          <input class="input" type="text" name="alergia" />
+        </div>
 
+        <div>
+          <label style="font-weight:900;">Cor</label>
+          <input class="input" type="text" name="cor" />
+        </div>
 
-  <label>Fotografia (jpg/png/webp):</label><br/>
-  <input type="file" name="fotografia" accept=".jpg,.jpeg,.png,.webp" /><br/><br/>
+        <div>
+          <label style="font-weight:900;">Peso (kg)</label>
+          <input class="input" type="text" name="peso" />
+        </div>
 
-  <button type="submit">Guardar</button>
-  <a href="<%= request.getContextPath() %>/animais?nif=<%= nif %>">Cancelar</a>
-</form>
+        <div>
+          <label style="font-weight:900;">Características distintivas</label>
+          <input class="input" type="text" name="distintivas" />
+        </div>
+
+        <div>
+          <label style="font-weight:900;">Nº Chip</label>
+          <input class="input" type="text" name="numChip" />
+        </div>
+
+        <div>
+          <label style="font-weight:900;">Pai</label>
+          <select class="input" name="idPai">
+            <option value="">-- (desconhecido) --</option>
+            <%
+              if (animaisDoTutor != null) {
+                for (Animal an : animaisDoTutor) {
+                  if (!"M".equalsIgnoreCase(an.getSexo())) continue;
+            %>
+              <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
+            <%
+                }
+              }
+            %>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-weight:900;">Mãe</label>
+          <select class="input" name="idMae">
+            <option value="">-- (desconhecida) --</option>
+            <%
+              if (animaisDoTutor != null) {
+                for (Animal an : animaisDoTutor) {
+                  if (!"F".equalsIgnoreCase(an.getSexo())) continue;
+            %>
+              <option value="<%= an.getIdAnimal() %>"><%= an.getNome() %> (#<%= an.getIdAnimal() %>)</option>
+            <%
+                }
+              }
+            %>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-weight:900;">Taxonomia</label>
+          <select class="input" name="idTaxonomia" required>
+            <option value="">-- escolher --</option>
+            <%
+              if (taxonomias != null) {
+                for (Taxonomia t : taxonomias) {
+
+                  String especie = t.getEspecie() == null ? "" : t.getEspecie();
+                  String raca = t.getRaca() == null ? "" : t.getRaca();
+
+                  String labelBase = especie + (raca.isBlank() ? "" : " - " + raca);
+
+                  String detalhes =
+                          " | " + (t.getPorte() == null ? "-" : t.getPorte()) +
+                                  " | " + (t.getRegimeAlimentar() == null ? "-" : t.getRegimeAlimentar()) +
+                                  " | vida: " + (t.getExpetativaVida() == null ? "-" : t.getExpetativaVida()) + " anos" +
+                                  " | peso: " + (t.getPeso() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getPeso())) + " kg" +
+                                  " | comp: " + (t.getComprimento() == null ? "-" : String.format(java.util.Locale.US, "%.2f", t.getComprimento())) + " cm";
+
+                  String extra = "";
+                  if (t.getPredisposicaoGenetica() != null && !t.getPredisposicaoGenetica().isBlank()) {
+                    extra += " | gen: " + t.getPredisposicaoGenetica();
+                  }
+                  if (t.getCuidadosEspeciais() != null && !t.getCuidadosEspeciais().isBlank()) {
+                    extra += " | cuidados: " + t.getCuidadosEspeciais();
+                  }
+            %>
+              <option value="<%= t.getIdTaxonomia() %>"><%= labelBase + detalhes + extra %></option>
+            <%
+                }
+              }
+            %>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-weight:900;">Fotografia (jpg/png/webp)</label>
+          <input class="input" type="file" name="fotografia" accept=".jpg,.jpeg,.png,.webp" />
+        </div>
+
+        <div class="actions" style="margin-top:4px;">
+          <button class="btn btn-primary" type="submit">Guardar</button>
+          <a class="btn btn-secondary" href="<%= request.getContextPath() %>/animais?nif=<%= nif %>">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>
-

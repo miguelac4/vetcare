@@ -94,31 +94,29 @@ public class AnimalDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Animal a = new Animal();
-
                     a.setIdAnimal(rs.getInt("idAnimal"));
                     a.setNome(rs.getString("nome"));
                     a.setRaca(rs.getString("raca"));
                     a.setSexo(rs.getString("sexo"));
 
-                    java.sql.Date d = rs.getDate("dataNascimento");
-                    a.setDataNascimento(d == null ? null : d.toLocalDate());
+                    java.sql.Date dn = rs.getDate("dataNascimento");
+                    a.setDataNascimento(dn == null ? null : dn.toLocalDate());
 
-                    a.setIdPai((Integer) rs.getObject("idPai"));
-                    a.setIdMae((Integer) rs.getObject("idMae"));
+                    a.setIdPai(getNullableInt(rs, "idPai"));
+                    a.setIdMae(getNullableInt(rs, "idMae"));
+                    a.setIdTaxonomia(getNullableInt(rs, "idTaxonomia"));
 
                     a.setEstadoReprodutivo(rs.getString("estadoReprodutivo"));
                     a.setAlergia(rs.getString("alergia"));
                     a.setCor(rs.getString("cor"));
                     a.setFotografia(rs.getString("fotografia"));
 
-                    java.math.BigDecimal bd = rs.getBigDecimal("peso");
-                    a.setPeso(bd == null ? null : bd.doubleValue());
+                    double peso = rs.getDouble("peso");
+                    a.setPeso(rs.wasNull() ? null : peso);
 
                     a.setDistintivas(rs.getString("distintivas"));
                     a.setNumChip(rs.getString("numChip"));
-
                     a.setNif(rs.getString("nif"));
-                    a.setIdTaxonomia((Integer) rs.getObject("idTaxonomia"));
 
                     return a;
                 }
@@ -129,8 +127,6 @@ public class AnimalDao {
         }
         return null;
     }
-
-
 
 
     public void update(Animal a) {

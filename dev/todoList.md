@@ -34,7 +34,7 @@
 * 🔶 **4.2** Atualizar horários atribuindo a supervisão dos períodos de funcionamento dos serviços a veterinários, garantindo que:
     * Não existem períodos sobrepostos por veterinário;
     * As clínicas não funcionam aos fins de semana e feriados.
-* ✅ **4.3** Exportar para documento XML/JSON a ficha e histórico clínicos de um animal.
+* 🔶 **4.3** Exportar para documento XML/JSON a ficha e histórico clínicos de um animal.
 * 🔶 **4.4** Importar de documento XML/JSON a ficha e histórico clínicos de um animal.
 * 🔶 **4.5** Elaborar lista (ordenada por idade) de animais que ultrapassaram a expetativa de vida.
 * 🔶 **4.6** Produzir lista (ordenada por nome) dos tutores e respetiva quantidade de animais com excesso de peso.

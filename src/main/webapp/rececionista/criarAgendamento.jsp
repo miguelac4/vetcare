@@ -3,7 +3,6 @@
   User: Miguel
   Date: 12/13/2025
   Time: 3:44 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
@@ -17,68 +16,112 @@
   List<Animal> animais = (List<Animal>) request.getAttribute("animais");
 %>
 
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <title>Criar Agendamento</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Criar Agendamento</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/rececionista/home.jsp">🐾 vetCare</a>
 
-<h2>Criar Agendamento</h2>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/rececionista/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
+</header>
 
-<a href="<%= request.getContextPath() %>/rececionista/agendamentos">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Criar Agendamento</h1>
+      <p class="muted">Preenche os dados e confirma</p>
+    </div>
 
-<hr/>
+    <div class="page-actions">
+      <a class="btn btn-secondary"
+         href="<%= request.getContextPath() %>/rececionista/agendamentos">
+        Voltar
+      </a>
+    </div>
+  </section>
 
-<form method="post" action="<%= request.getContextPath() %>/rececionista/agendamento/criar">
+  <section class="panel" style="max-width: 720px;">
+    <div class="panel-head">
+      <h2>Dados da marcação</h2>
+      <p class="muted">Escolhe clínica, serviço e animal</p>
+    </div>
 
-  Data/Hora:
-  <input type="datetime-local" name="dataHora" required />
-  <br/><br/>
+    <form method="post" action="<%= request.getContextPath() %>/rececionista/agendamento/criar">
+      <div style="display:grid; gap:12px;">
 
-  Localidade (Clínica):
-  <select name="localidade" required>
-    <option value="">-- selecionar --</option>
-    <%
-      for (Clinica c : clinicas) {
-    %>
-    <option value="<%= c.getLocalidade() %>"><%= c.getLocalidade() %></option>
-    <%
-      }
-    %>
-  </select>
-  <br/><br/>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Data/Hora</label>
+          <input class="input" type="datetime-local" name="dataHora" required />
+        </div>
 
-  Serviço:
-  <select name="idServico" required>
-    <option value="">-- selecionar --</option>
-    <%
-      for (Servico s : servicos) {
-    %>
-    <option value="<%= s.getIdServico() %>"><%= s.getTipo() %></option>
-    <%
-      }
-    %>
-  </select>
-  <br/><br/>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Localidade (Clínica)</label>
+          <select class="input" name="localidade" required>
+            <option value="">-- selecionar --</option>
+            <%
+              for (Clinica c : clinicas) {
+            %>
+              <option value="<%= c.getLocalidade() %>"><%= c.getLocalidade() %></option>
+            <%
+              }
+            %>
+          </select>
+        </div>
 
-  Animal:
-  <select name="idAnimal" required>
-    <option value="">-- selecionar --</option>
-    <%
-      for (Animal a : animais) {
-    %>
-    <option value="<%= a.getIdAnimal() %>">
-      <%= a.getNome() %> (ID <%= a.getIdAnimal() %>)
-    </option>
-    <%
-      }
-    %>
-  </select>
-  <br/><br/>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Serviço</label>
+          <select class="input" name="idServico" required>
+            <option value="">-- selecionar --</option>
+            <%
+              for (Servico s : servicos) {
+            %>
+              <option value="<%= s.getIdServico() %>"><%= s.getTipo() %></option>
+            <%
+              }
+            %>
+          </select>
+        </div>
 
-  <button type="submit">Criar</button>
-</form>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Animal</label>
+          <select class="input" name="idAnimal" required>
+            <option value="">-- selecionar --</option>
+            <%
+              for (Animal a : animais) {
+            %>
+              <option value="<%= a.getIdAnimal() %>">
+                <%= a.getNome() %> (ID <%= a.getIdAnimal() %>)
+              </option>
+            <%
+              }
+            %>
+          </select>
+        </div>
+
+        <div class="actions" style="margin-top: 8px;">
+          <button class="btn btn-primary" type="submit">Criar</button>
+          <a class="btn btn-secondary" href="<%= request.getContextPath() %>/rececionista/agendamentos">Cancelar</a>
+        </div>
+
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>

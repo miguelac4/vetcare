@@ -10,48 +10,72 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VetCare - Registo</title>
+  <link rel="stylesheet" href="<% =request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/index.jsp">🐾 vetCare</a>
+</header>
 
-<h2>Criar Conta (Tutor)</h2>
+<main class="content">
+  <section class="panel" style="max-width: 620px; margin: 40px auto;">
+    <div class="panel-head">
+      <h1>Criar Conta(Tutor)</h1>
+      <p class="muted">Registo do tutor</p>
+    </div>
 
-<%
-  String erro = (String) request.getAttribute("erro");
-  if (erro != null) {
-%>
-<p style="color:red;"><%= erro %></p>
-<%
-  }
-%>
+    <%
+      String erro = (String) request.getAttribute("erro");
+      if (erro != null) {
+    %>
+      <div class="panel" style="border-color:#ffd6d6; background:#fff5f5; box-shadow:none; margin-top:10px;>
+        <p style="margin:0; font-weight:800; color:#c92a2a;"><%= erro %></p>
+      </div>
+    <%
+    }
+    %>
 
-<form method="post" action="<%= request.getContextPath() %>/register">
-  <label>Nome:</label><br/>
-  <input type="text" name="nome" required /><br/><br/>
+    <form method="post" action="<%= request.getContextPath() %>/register"
+        class="panel" style="box-shadow:none; border:none; padding:0; margin-top:14px;">
 
-  <label>NIF:</label><br/>
-  <input type="text" name="nif" required /><br/><br/>
+      <div style="display:grid; gap:10px;">
+        <label style="font-weight:800;">Nome</label>
+        <input class="input" type="text" name="nome" required>
 
-  <label>Email:</label><br/>
-  <input type="email" name="email" required /><br/><br/>
+        <label style="font-weight:800; margin-top:8px;">NIF</label>
+        <input class="input" type="text" name="nif" required>
 
-  <label>Password:</label><br/>
-  <input type="password" name="password" required /><br/><br/>
+        <label style="font-weight:800; margin-top:8px;">Email</label>
+        <input class="input" type="email" name="email" required>
 
-  <label>Telefone (opcional):</label><br/>
-  <input type="text" name="telefone" /><br/><br/>
+        <label style="font-weight:800; margin-top:8px;">Password</label>
+        <input class="input" type="password" name="password" required>
 
-  <label>Morada (opcional):</label><br/>
-  <input type="text" name="morada" /><br/><br/>
+        <label style="font-weight:800; margin-top:8px;">Telefone (opcional)</label>
+        <input class="input" type="text" name="telefone">
 
-  <button type="submit">Registar</button>
-</form>
+        <label style="font-weight:800; margin-top:8px;">Morada (opcional)</label>
+        <input class="input" type="text" name="morada">
 
-<p>
-  Já tens conta?
-  <a href="<%= request.getContextPath() %>/login">Login</a>
-</p>
+        <button class="btn btn-primary" type="submit" style="margin-top: 10px;">
+          Registar
+        </button>
 
+        <p class="muted" style="margin-top: 10px;">
+          Já tens conta?
+          <a href="<%= request.getContextPath() %>/login" class="link">Login</a>
+        </p>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  @ 2025 VetCare — Sistema de Gestão
+</footer>
 </body>
 </html>
 
