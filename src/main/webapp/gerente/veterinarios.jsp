@@ -22,6 +22,7 @@
     <th>Nome</th>
     <th>Email</th>
     <th>Nº Licença</th>
+    <th>Ações</th>
   </tr>
 
   <%
@@ -34,6 +35,10 @@
     <td><%= v.getNome() %></td>
     <td><%= v.getEmail() %></td>
     <td><%= v.getNumLicenca() == null ? "(sem registo)" : v.getNumLicenca() %></td>
+    <td>
+      <a href="<%= request.getContextPath() %>/gerente/utilizadores/veterinarios/editar?id=<%= v.getId() %>">Editar</a>
+    </td>
+
   </tr>
   <%
       }

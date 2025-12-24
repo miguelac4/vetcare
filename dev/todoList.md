@@ -30,8 +30,7 @@
 
 ## Gerente
 
-* 🚧 **4.1** Criar/Atualizar dados dos médicos veterinários, tutores e respetivos animais.
-    * [TODO] Falta informação no vet e recec; Editar os campos. 
+* ✅ **4.1** Criar/Atualizar dados dos médicos veterinários, tutores e respetivos animais.
 * 🔶 **4.2** Atualizar horários atribuindo a supervisão dos períodos de funcionamento dos serviços a veterinários, garantindo que:
     * Não existem períodos sobrepostos por veterinário;
     * As clínicas não funcionam aos fins de semana e feriados.
