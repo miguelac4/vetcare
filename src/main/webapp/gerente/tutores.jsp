@@ -15,7 +15,12 @@
 <h2>Lista de Tutores</h2>
 
 <table border="1" cellpadding="6">
-    <tr><th>NIF</th><th>Nome</th><th>Email</th></tr>
+    <tr>
+        <th>NIF</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ações</th>
+    </tr>
 
     <%
         List<Cliente> clientes = (List<Cliente>) request.getAttribute("clientes");
@@ -26,6 +31,10 @@
         <td><%= c.getNif() %></td>
         <td><%= c.getNome() %></td>
         <td><%= c.getEmail() %></td>
+        <td>
+            <a href="<%= request.getContextPath() %>/gerente/tutor/editar?nif=<%= c.getNif() %>">Editar</a>
+        </td>
+
     </tr>
     <%
             }

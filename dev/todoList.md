@@ -20,7 +20,7 @@
     * Apresentação do escalão etário: bebé, jovem, adulto ou idoso.
 * ✅ **2.3** Visualizar a árvore genealógica de um animal.
 * ✅ **2.4** Obter a lista de chamada (data-hora) dos animais com agendamento de serviços sob a sua supervisão.
-* 🚧 **2.5** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
+* ✅ **2.5** Atualizar, no contexto da prestação de serviços, o histórico clínico do animal.
 * ✅ **2.6** Agendar / Cancelar a prestação de serviços veterinários.
 
 ## Tutor
@@ -30,8 +30,7 @@
 
 ## Gerente
 
-* 🚧 **4.1** Criar/Atualizar dados dos médicos veterinários, tutores e respetivos animais.
-    * [TODO] Falta informação no vet e recec; Editar os campos. 
+* ✅ **4.1** Criar/Atualizar dados dos médicos veterinários, tutores e respetivos animais.
 * 🔶 **4.2** Atualizar horários atribuindo a supervisão dos períodos de funcionamento dos serviços a veterinários, garantindo que:
     * Não existem períodos sobrepostos por veterinário;
     * As clínicas não funcionam aos fins de semana e feriados.

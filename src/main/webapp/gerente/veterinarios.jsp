@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="java.util.*" %>
-<%@ page import="org.example.vetcare.model.User" %>
+<%@ page import="org.example.vetcare.model.Veterinario" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,17 +21,24 @@
     <th>ID</th>
     <th>Nome</th>
     <th>Email</th>
+    <th>Nº Licença</th>
+    <th>Ações</th>
   </tr>
 
   <%
-    List<User> veterinarios = (List<User>) request.getAttribute("veterinarios");
+    List<Veterinario> veterinarios = (List<Veterinario>) request.getAttribute("veterinarios");
     if (veterinarios != null) {
-      for (User u : veterinarios) {
+      for (Veterinario v : veterinarios) {
   %>
   <tr>
-    <td><%= u.getId() %></td>
-    <td><%= u.getNome() %></td>
-    <td><%= u.getEmail() %></td>
+    <td><%= v.getId() %></td>
+    <td><%= v.getNome() %></td>
+    <td><%= v.getEmail() %></td>
+    <td><%= v.getNumLicenca() == null ? "(sem registo)" : v.getNumLicenca() %></td>
+    <td>
+      <a href="<%= request.getContextPath() %>/gerente/utilizadores/veterinarios/editar?id=<%= v.getId() %>">Editar</a>
+    </td>
+
   </tr>
   <%
       }

@@ -21,6 +21,7 @@
     <th>ID</th>
     <th>Nome</th>
     <th>Email</th>
+    <th>Ações</th>
   </tr>
 
   <%
@@ -32,6 +33,9 @@
     <td><%= u.getId() %></td>
     <td><%= u.getNome() %></td>
     <td><%= u.getEmail() %></td>
+    <td>
+      <a href="<%= request.getContextPath() %>/gerente/utilizadores/rececionistas/editar?id=<%= u.getId() %>">Editar</a>
+    </td>
   </tr>
   <%
       }
