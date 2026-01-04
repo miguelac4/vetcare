@@ -41,7 +41,9 @@
 
   <a class="logo" href="<%= request.getContextPath() %>/veterinario/home.jsp">🐾 vetCare</a>
   <nav class="nav">
-    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Voltar</a>
+    <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
   <div class="user-badge">
@@ -57,7 +59,7 @@
       <p class="muted">Não foi possível carregar o registo clínico.</p>
     </div>
     <div class="actions">
-      <a class="btn btn-primary" href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Voltar</a>
+      <a class="btn btn-primary" href="<%= request.getContextPath() %>/veterinario/procurar-tutores"><-Voltar</a>
     </div>
   </section>
 </main>

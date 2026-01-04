@@ -57,7 +57,7 @@
     </div>
 
     <div class="page-actions">
-      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/gerente/home.jsp">Voltar</a>
+      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/gerente/home.jsp"><-Voltar</a>
     </div>
   </section>
 

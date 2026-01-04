@@ -46,7 +46,8 @@
 
   <nav class="nav">
     <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
-    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de chamada</a>
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
   <div class="user-badge">

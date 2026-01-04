@@ -31,8 +31,10 @@
     <a class="logo" href="<%= request.getContextPath() %>/gerente/home.jsp">🐾 vetCare</a>
 
     <nav class="nav">
-        <a href="<%= request.getContextPath() %>/gerente/home.jsp">Home</a>
-        <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+      <a href="<%= request.getContextPath() %>/gerente/home.jsp">Home</a>
+      <a href="<%= request.getContextPath() %>/gerente/utilizadores">Utilizadores</a>
+      <a href="<%= request.getContextPath() %>/gerente/animais">Animais</a>
+      <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
     </nav>
 
     <%-- Badge do utilizador --%>

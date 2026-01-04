@@ -55,7 +55,7 @@
         </div>
 
         <div class="actions">
-            <a class="btn btn-secondary" href="<%= request.getContextPath() %>/tutor/agendamentos">Voltar</a>
+            <a class="btn btn-secondary" href="<%= request.getContextPath() %>/tutor/agendamentos"><-Voltar</a>
         </div>
     </section>
 </main>

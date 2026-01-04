@@ -44,8 +44,10 @@
 <header class="topbar">
   <a class="logo" href="<%= ctx %>/veterinario/home.jsp">🐾 vetCare</a>
   <nav class="nav">
-    <a href="<%= ctx %>/veterinario/home.jsp">Home</a>
-    <a class="nav-logout" href="<%= ctx %>/logout">Sair</a>
+    <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
 
   <div class="user-badge">
@@ -62,7 +64,7 @@
     </div>
 
     <div class="actions">
-      <a class="btn btn-secondary" href="javascript:history.back()">Voltar</a>
+      <a class="btn btn-secondary" href="javascript:history.back()"><-Voltar</a>
     </div>
   </section>
 </main>

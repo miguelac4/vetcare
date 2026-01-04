@@ -39,9 +39,11 @@
 
   <nav class="nav">
     <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
-    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Procurar tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
+
 
   <div class="user-badge">
     <span class="role-pill"><%= roleLabel %></span>
@@ -58,7 +60,7 @@
 
     <div class="page-actions">
       <a class="btn btn-secondary" href="<%= request.getContextPath() %>/veterinario/procurar-tutores">
-        Voltar
+        <-Voltar
       </a>
     </div>
   </section>

@@ -49,6 +49,7 @@
 
   <nav class="nav">
     <a href="<%= request.getContextPath() %>/rececionista/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/utilizadores/tutores">Tutores</a>
     <a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>

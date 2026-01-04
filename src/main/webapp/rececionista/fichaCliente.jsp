@@ -69,7 +69,7 @@
     </div>
 
     <div class="page-actions">
-      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/utilizadores/tutores">← Voltar</a>
+      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/utilizadores/tutores"><-Voltar</a>
     </div>
   </section>
 

@@ -42,7 +42,8 @@
 
     <nav class="nav">
       <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
-      <a href="<%= request.getContextPath() %>/veterinario/agendamentos/sem-veterinario">Sem veterinário</a>
+      <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+      <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
       <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
     </nav>
 
@@ -58,6 +59,11 @@
             <h1>Marcações sem veterinário</h1>
             <p class="muted">Assume uma marcação para a tua lista</p>
         </div>
+
+        <div class ="page-actions">
+            <a class="btn btn-secondary" href="<%= request.getContextPath() %>/veterinario/home.jsp"><-Voltar</a>
+        </div>
+
     </section>
 
     <section class="panel">
