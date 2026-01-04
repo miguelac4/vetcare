@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VetCare - Registo</title>
-  <link rel="stylesheet" href="<% =request.getContextPath() %>/css/main.css">
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
 
 <body>
@@ -21,7 +21,7 @@
 </header>
 
 <main class="content">
-  <section class="panel" style="max-width: 620px; margin: 40px auto;">
+  <section class="panel panel-soft" style="max-width: 620px; margin: 40px auto;">
     <div class="panel-head">
       <h1>Criar Conta(Tutor)</h1>
       <p class="muted">Registo do tutor</p>
@@ -54,10 +54,10 @@
         <label style="font-weight:800; margin-top:8px;">Password</label>
         <input class="input" type="password" name="password" required>
 
-        <label style="font-weight:800; margin-top:8px;">Telefone (opcional)</label>
+        <label style="font-weight:800; margin-top:8px;">Telefone</label>
         <input class="input" type="text" name="telefone">
 
-        <label style="font-weight:800; margin-top:8px;">Morada (opcional)</label>
+        <label style="font-weight:800; margin-top:8px;">Morada</label>
         <input class="input" type="text" name="morada">
 
         <button class="btn btn-primary" type="submit" style="margin-top: 10px;">

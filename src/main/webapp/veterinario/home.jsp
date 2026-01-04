@@ -6,7 +6,17 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("veterinario".equals(role)) roleLabel = "Veterinário";
+%>
+
+<!DOCTYPE html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,13 +26,20 @@
 
 <body>
 <header class="topbar">
-  <span class="logo">🐾 vetCare</span>
+  <a class="logo" href="<%= request.getContextPath() %>/veterinario/home.jsp">🐾 vetCare</a>
 
   <nav class="nav">
-    <a href="#">Home</a>
-    <a <href="<%= request.getContextPath() %>/logout" class="nav-logout">Sair</a>
+    <a href="<%= request.getContextPath() %>/veterinario/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/veterinario/lista-chamada">Lista de Chamada</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
+
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
 </header>
+
 
 <main class="content">
   <section class="page-head">
@@ -43,12 +60,12 @@
           Procurar Tutor
       </a>
 
-      <a class="btn btn-secondary"
+      <a class="btn btn-primary"
         href="<%= request.getContextPath() %>/veterinario/agendamentos/sem-veterinario">
           Marcações sem veterinário
       </a>
 
-      <a class="btn btn-secondary"
+      <a class="btn btn-primary"
          href="<%= request.getContextPath() %>/veterinario/lista-chamada">
         Lista de Chamada
       </a>

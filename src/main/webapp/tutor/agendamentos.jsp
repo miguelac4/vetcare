@@ -3,13 +3,23 @@
   User: Miguel
   Date: 12/20/2025
   Time: 8:02 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="org.example.vetcare.model.Agendamento" %>
+
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
 
 <%
   List<Agendamento> agendamentos = (List<Agendamento>) request.getAttribute("agendamentos");
@@ -20,63 +30,112 @@
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>As minhas marcações</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vetCare — As minhas marcações</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/tutor/home.jsp">🐾 vetCare</a>
 
-<h2>As minhas marcações</h2>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/tutor/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/animais">Animais</a>
+    <a href="<%= request.getContextPath() %>/tutor/agendamentos">Marcações</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
 
-<a href="<%= request.getContextPath() %>/tutor/home.jsp">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+  <%-- Badge do utilizador --%>
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
 
-<hr/>
+</header>
 
-<% if (agendamentos == null || agendamentos.isEmpty()) { %>
-<p>Não existem marcações.</p>
-<% } else { %>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>As minhas marcações</h1>
+      <p class="muted">Consulta e altera as tuas marcações futuras</p>
+    </div>
+  </section>
 
-<table border="1" cellpadding="6" cellspacing="0">
-  <tr>
-    <th>ID</th>
-    <th>Data</th>
-    <th>Hora</th>
-    <th>Animal</th>
-    <th>Serviço</th>
-    <th>Localidade</th>
-    <th>Estado</th>
-    <th>Ações</th>
-  </tr>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Lista</h2>
+      <p class="muted">Só podes alterar marcações que ainda não aconteceram</p>
+    </div>
 
-  <% for (Agendamento a : agendamentos) {
-    LocalDateTime dh = a.getDataHora();
-    String data = (dh == null) ? "" : dh.format(fmtData);
-    String hora = (dh == null) ? "" : dh.format(fmtHora);
+    <%
+      if (agendamentos == null || agendamentos.isEmpty()) {
+    %>
+      <p class="muted">Não existem marcações.</p>
+    <%
+      } else {
+    %>
 
-    boolean isPassado = (dh != null && dh.isBefore(now));
-  %>
-  <tr>
-    <td><%= a.getIdAgendamento() %></td>
-    <td><%= data %></td>
-    <td><%= hora %></td>
-    <td><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
-    <td><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
-    <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
-    <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
-    <td>
-      <% if (!isPassado) { %>
-      <a href="<%= request.getContextPath() %>/tutor/agendamento/editar?id=<%= a.getIdAgendamento() %>">Alterar</a>
-      <% } else { %>
-      <span style="color:gray;">(terminada)</span>
-      <% } %>
-    </td>
-  </tr>
-  <% } %>
-</table>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Animal</th>
+        <th>Serviço</th>
+        <th>Localidade</th>
+        <th>Estado</th>
+        <th class="col-actions">Ações</th>
+      </tr>
+      </thead>
 
-<% } %>
+      <tbody>
+      <%
+        for (Agendamento a : agendamentos) {
+          LocalDateTime dh = a.getDataHora();
+          String data = (dh == null) ? "" : dh.format(fmtData);
+          String hora = (dh == null) ? "" : dh.format(fmtHora);
+
+          boolean isPassado = (dh != null && dh.isBefore(now));
+      %>
+      <tr>
+        <td data-label="ID"><%= a.getIdAgendamento() %></td>
+        <td data-label="Data"><%= data %></td>
+        <td data-label="Hora"><%= hora %></td>
+        <td data-label="Animal"><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
+        <td data-label="Serviço"><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
+        <td data-label="Localidade"><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
+        <td data-label="Estado"><%= a.getEstado() == null ? "" : a.getEstado() %></td>
+
+        <td data-label="Ações" class="td-actions">
+          <% if (!isPassado) { %>
+            <a class="btn btn-secondary btn-sm"
+               href="<%= request.getContextPath() %>/tutor/agendamento/editar?id=<%= a.getIdAgendamento() %>">
+              Alterar
+            </a>
+          <% } else { %>
+            <span class="muted" style="font-weight:800;">Terminada</span>
+          <% } %>
+        </td>
+      </tr>
+      <%
+        }
+      %>
+      </tbody>
+    </table>
+
+    <%
+      }
+    %>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>

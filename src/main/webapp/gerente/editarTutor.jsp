@@ -3,7 +3,6 @@
   User: Miguel Cordeiro
   Date: 12/24/2025
   Time: 12:55 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.example.vetcare.model.Cliente" %>
@@ -12,74 +11,129 @@
   Cliente cliente = (Cliente) request.getAttribute("cliente");
 %>
 
-<html>
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <title>Gerente - Editar Tutor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Gerente · Editar Tutor</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/gerente/home.jsp">🐾 vetCare</a>
 
-<h2>Editar Tutor</h2>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/gerente/home.jsp">Home</a>
+    <a href="<%= request.getContextPath() %>/gerente/utilizadores">Utilizadores</a>
+    <a href="<%= request.getContextPath() %>/gerente/animais">Animais</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
 
-<p>
-  <a href="<%= request.getContextPath() %>/utilizadores/tutores">Voltar</a>
-  | <a href="<%= request.getContextPath() %>/logout">Logout</a>
-</p>
+  <%-- Badge do utilizador --%>
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
+</header>
 
-<hr/>
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Editar Tutor</h1>
+      <p class="muted">Atualizar dados do tutor</p>
+    </div>
+  </section>
 
-<form method="post" action="<%= request.getContextPath() %>/gerente/tutor/editar">
-  <input type="hidden" name="nif" value="<%= cliente.getNif() %>" />
+  <section class="panel" style="max-width: 720px;">
+    <form method="post" action="<%= request.getContextPath() %>/gerente/tutor/editar">
+      <input type="hidden" name="nif" value="<%= cliente.getNif() %>" />
 
-  <p>
-    <label>NIF:</label>
-    <input type="text" value="<%= cliente.getNif() %>" readonly />
-  </p>
+      <div style="display:grid; gap:12px;">
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">NIF</label>
+          <input class="input" type="text" value="<%= cliente.getNif() %>" readonly />
+        </div>
 
-  <p>
-    <label>Nome:</label>
-    <input type="text" name="nome" value="<%= cliente.getNome() %>" required />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Nome</label>
+          <input class="input" type="text" name="nome" value="<%= cliente.getNome() %>" required />
+        </div>
 
-  <p>
-    <label>Sexo:</label>
-    <input type="text" name="sexo" value="<%= cliente.getSexo() == null ? "" : cliente.getSexo() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Sexo</label>
+          <select class="input" name="sexo">
+            <option value="">-- selecionar --</option>
+            <option value="M" <%= "M".equals(cliente.getSexo()) ? "selected" : "" %>>M</option>
+            <option value="F" <%= "F".equals(cliente.getSexo()) ? "selected" : "" %>>F</option>
+          </select>
+        </div>
 
-  <p>
-    <label>Telefone:</label>
-    <input type="text" name="telefone" value="<%= cliente.getTelefone() == null ? "" : cliente.getTelefone() %>" />
-  </p>
 
-  <p>
-    <label>Email:</label>
-    <input type="text" value="<%= cliente.getEmail() %>" readonly />
-    <input type="hidden" name="email" value="<%= cliente.getEmail() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Telefone</label>
+          <input class="input" type="text" name="telefone"
+                 value="<%= cliente.getTelefone() == null ? "" : cliente.getTelefone() %>" />
+        </div>
 
-  <p>
-    <label>Morada:</label>
-    <input type="text" name="morada" value="<%= cliente.getMorada() == null ? "" : cliente.getMorada() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Email</label>
+          <input class="input" type="text" value="<%= cliente.getEmail() %>" readonly />
+          <input type="hidden" name="email" value="<%= cliente.getEmail() %>" />
+          <p class="muted" style="margin:0;">O email está bloqueado nesta edição.</p>
+        </div>
 
-  <p>
-    <label>Freguesia:</label>
-    <input type="text" name="freguesia" value="<%= cliente.getFreguesia() == null ? "" : cliente.getFreguesia() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Morada</label>
+          <input class="input" type="text" name="morada"
+                 value="<%= cliente.getMorada() == null ? "" : cliente.getMorada() %>" />
+        </div>
 
-  <p>
-    <label>Concelho:</label>
-    <input type="text" name="concelho" value="<%= cliente.getConcelho() == null ? "" : cliente.getConcelho() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Freguesia</label>
+          <input class="input" type="text" name="freguesia"
+                 value="<%= cliente.getFreguesia() == null ? "" : cliente.getFreguesia() %>" />
+        </div>
 
-  <p>
-    <label>Capital Social:</label>
-    <input type="text" name="capitalSocial"
-           value="<%= cliente.getCapitalSocial() == null ? "" : cliente.getCapitalSocial() %>" />
-  </p>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Concelho</label>
+          <input class="input" type="text" name="concelho"
+                 value="<%= cliente.getConcelho() == null ? "" : cliente.getConcelho() %>" />
+        </div>
 
-  <button type="submit">Guardar</button>
-</form>
+        <div style="display:grid; gap:8px;">
+          <label style="font-weight:800;">Capital Social</label>
+          <input class="input" type="text" name="capitalSocial"
+                 value="<%= cliente.getCapitalSocial() == null ? "" : cliente.getCapitalSocial() %>" />
+        </div>
+
+        <div class="actions" style="margin-top:10px;">
+          <button class="btn btn-primary" type="submit">Guardar</button>
+
+          <a class="btn btn-secondary"
+             href="<%= request.getContextPath() %>/utilizadores/tutores">
+            Voltar
+          </a>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>
-
