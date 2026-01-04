@@ -7,6 +7,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.example.vetcare.model.Cliente" %>
 
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -22,10 +33,15 @@
 
   <nav class="nav">
     <a href="<%= request.getContextPath() %>/rececionista/home.jsp">Home</a>
-    <a href="<%= request.getContextPath() %>/rececionista/tutores">Tutores</a>
+    <a href="<%= request.getContextPath() %>/utilizadores/tutores">Tutores</a>
     <a href="<%= request.getContextPath() %>/rececionista/agendamentos">Agendamentos</a>
     <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
   </nav>
+  <!-- badge do role -->
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
+
 </header>
 
 <main class="content">
@@ -53,7 +69,7 @@
     </div>
 
     <div class="page-actions">
-      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/rececionista/tutores">← Voltar</a>
+      <a class="btn btn-secondary" href="<%= request.getContextPath() %>/utilizadores/tutores">← Voltar</a>
     </div>
   </section>
 

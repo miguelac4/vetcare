@@ -3,37 +3,85 @@
   User: Miguel Cordeiro
   Date: 12/17/2025
   Time: 10:27 AM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
+<%
+  String ctx = request.getContextPath();
+%>
+
+
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-    <title>Procurar Tutor</title>
-    <style>
-        .box { position: relative; width: 320px; }
-        .sugestoes { position:absolute; left:0; right:0; border:1px solid #ccc; background:#fff; }
-        .item { padding:6px; cursor:pointer; }
-        .item:hover { background:#eee; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VetCare — Procurar Tutor</title>
+    <link rel="stylesheet" href="<%= ctx %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+    <a class="logo" href="<%= ctx %>/veterinario/home.jsp">🐾 vetCare</a>
 
-<h2>Procurar Tutor</h2>
+    <nav class="nav">
+      <a href="<%= ctx %>/veterinario/home.jsp">Home</a>
+      <a href="<%= ctx %>/veterinario/agendamentos/sem-veterinario">Sem veterinário</a>
+      <a class="nav-logout" href="<%= ctx %>/logout">Sair</a>
+    </nav>
+    <div class="user-badge">
+      <span class="role-pill"><%= roleLabel %></span>
+    </div>
 
-<a href="<%= request.getContextPath() %>/veterinario/home.jsp">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+</header>
 
-<hr/>
+<main class="content">
 
-<div class="box">
-    <label>Nome do tutor:</label><br/>
-    <input id="nomeTutor" type="text" autocomplete="off" />
-    <input id="nifTutor" type="hidden" />
+    <section class="page-head">
+        <div>
+            <h1>Procurar Tutor</h1>
+            <p class="muted">Escreve o nome para pesquisar e selecionar um tutor</p>
+        </div>
 
-    <div id="sugestoes" class="sugestoes" style="display:none;"></div>
-</div>
+        <div class="page-actions">
+            <a class="btn btn-secondary" href="<%= ctx %>/veterinario/home.jsp">Voltar</a>
+        </div>
+    </section>
 
-<p id="selecionado"></p>
+    <section class="panel" style="max-width: 720px;">
+        <div class="panel-head">
+            <h2>Pesquisa</h2>
+            <p class="muted">O sistema sugere tutores à medida que escreves</p>
+        </div>
+
+        <div class="autocomplete">
+            <label style="font-weight:800;">Nome do tutor</label>
+            <input id="nomeTutor" class="input" type="text" autocomplete="off" placeholder="Ex: Ricardo Santos" />
+            <input id="nifTutor" type="hidden" />
+            <div id="sugestoes" class="autocomplete-list" style="display:none;"></div>
+        </div>
+
+        <div class="panel" style="margin-top:12px; box-shadow:none; background:#fff; border:1px dashed var(--border);">
+            <p id="selecionado" class="muted" style="margin:0;">Nenhum tutor selecionado.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    © 2025 VetCare — Sistema de Gestão
+</footer>
 
 <script>
     const input = document.getElementById("nomeTutor");
@@ -54,7 +102,7 @@
         }
 
         timer = setTimeout(async () => {
-            const url = "<%= request.getContextPath() %>/veterinario/autocomplete-tutores?q=" + encodeURIComponent(q);
+            const url = "<%= ctx %>/veterinario/autocomplete-tutores?q=" + encodeURIComponent(q);
             const res = await fetch(url);
             const data = await res.json();
 
@@ -66,15 +114,14 @@
 
             data.forEach(t => {
                 const div = document.createElement("div");
-                div.className = "item";
+                div.className = "autocomplete-item";
                 div.textContent = t.nome + " (" + t.email + ")";
                 div.onclick = () => {
                     input.value = t.nome;
                     nifHidden.value = t.nif;
                     sugestoesDiv.style.display = "none";
                     selecionado.innerHTML = "Selecionado: <b>" + t.nome + "</b> | NIF: " + t.nif;
-                    window.location.href = "<%= request.getContextPath() %>/animais?nif=" + encodeURIComponent(t.nif);
-
+                    window.location.href = "<%= ctx %>/animais?nif=" + encodeURIComponent(t.nif);
                 };
                 sugestoesDiv.appendChild(div);
             });

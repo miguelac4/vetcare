@@ -1,9 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Miguel
+  User: Miguel Cordeiro
   Date: 12/21/2025
   Time: 10:34 AM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.example.vetcare.model.Animal" %>
@@ -12,13 +11,62 @@
 <%@ page import="java.time.temporal.ChronoUnit" %>
 
 <%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
+<%
   Animal a = (Animal) request.getAttribute("animal");
   Taxonomia t = (Taxonomia) request.getAttribute("taxonomia");
 
   if (a == null) {
 %>
-<h2>Animal não encontrado.</h2>
-<a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Voltar</a>
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Registo Clínico</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
+</head>
+<body>
+<header class="topbar">
+
+  <a class="logo" href="<%= request.getContextPath() %>/veterinario/home.jsp">🐾 vetCare</a>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Voltar</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
+
+</header>
+
+<main class="content">
+  <section class="panel">
+    <div class="panel-head">
+      <h1>Animal não encontrado</h1>
+      <p class="muted">Não foi possível carregar o registo clínico.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" href="<%= request.getContextPath() %>/veterinario/procurar-tutores">Voltar</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
+</body>
+</html>
 <%
     return;
   }
@@ -35,7 +83,6 @@
     long meses = ChronoUnit.MONTHS.between(nascimento, hoje);
     long anos = ChronoUnit.YEARS.between(nascimento, hoje);
 
-    // unidade mais legível
     if (dias < 14) {
       idadeTxt = dias + " dias";
     } else if (semanas < 10) {
@@ -46,75 +93,96 @@
       idadeTxt = anos + " anos";
     }
 
-    // escalão etário (ajustável)
-    // bebé: < 6 meses
-    // jovem: 6-24 meses
-    // adulto: 2-8 anos
-    // idoso: >= 8 anos
     if (meses < 6) escalao = "bebé";
     else if (meses < 24) escalao = "jovem";
     else if (anos < 8) escalao = "adulto";
     else escalao = "idoso";
   }
-%>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Registo Clínico - <%= a.getNome() %></title>
-</head>
-<body>
-
-<h2>Registo Clínico</h2>
-
-<%
   String nif = (String) request.getAttribute("nif");
   String voltarUrl = (nif != null && !nif.isBlank())
           ? (request.getContextPath() + "/animais?nif=" + nif)
           : (request.getContextPath() + "/veterinario/procurar-tutores");
 %>
 
-<a href="<%= voltarUrl %>">Voltar</a>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Registo Clínico - <%= a.getNome() %></title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
+</head>
 
+<body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/veterinario/home.jsp">🐾 vetCare</a>
 
-<a href="<%= request.getContextPath() %>/logout">Logout</a>
+  <nav class="nav">
+    <a href="<%= voltarUrl %>">Voltar</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
+</header>
 
-<hr/>
+<main class="content">
 
-<h3><%= a.getNome() %></h3>
+  <section class="page-head">
+    <div>
+      <h1>Registo Clínico</h1>
+      <p class="muted"><%= a.getNome() %> — detalhes gerais do animal</p>
+    </div>
 
-<p>
-  <b>Taxonomia:</b>
-  <%
-    if (t != null) {
-  %>
-  <%= (t.getEspecie() == null ? "" : t.getEspecie()) %>
-  <%= (t.getRaca() == null ? "" : " - " + t.getRaca()) %>
-  <%
-  } else {
-  %>
-  -
-  <%
-    }
-  %>
-</p>
+    <div class="page-actions">
+      <a class="btn btn-secondary"
+         href="<%= request.getContextPath() %>/veterinario/animal/arvore?id=<%= a.getIdAnimal() %>&nif=<%= (nif == null ? "" : nif) %>">
+        Ver árvore genealógica
+      </a>
+    </div>
+  </section>
 
-<p>
-  <b>Data de nascimento:</b> <%= nascimento == null ? "-" : nascimento %><br/>
-  <b>Data atual:</b> <%= hoje %><br/>
-  <b>Idade:</b> <%= idadeTxt %><br/>
-  <b>Escalão etário:</b> <%= escalao %>
-</p>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Identificação</h2>
+      <p class="muted">Dados base e taxonomia</p>
+    </div>
 
-<p>
-  <a href="<%= request.getContextPath() %>/veterinario/animal/arvore?id=<%= a.getIdAnimal() %>&nif=<%= nif %>">
-    Ver árvore genealógica
-  </a>
-</p>
+    <p style="margin:0;">
+      <b>Nome:</b> <%= a.getNome() %><br/>
+      <b>Taxonomia:</b>
+      <%
+        if (t != null) {
+      %>
+        <%= (t.getEspecie() == null ? "" : t.getEspecie()) %>
+        <%= (t.getRaca() == null ? "" : " - " + t.getRaca()) %>
+      <%
+        } else {
+      %>
+        -
+      <%
+        }
+      %>
+    </p>
+  </section>
 
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Idade e escalão</h2>
+      <p class="muted">Cálculo automático com base na data de nascimento</p>
+    </div>
+
+    <p style="margin:0;">
+      <b>Data de nascimento:</b> <%= nascimento == null ? "-" : nascimento %><br/>
+      <b>Data atual:</b> <%= hoje %><br/>
+      <b>Idade:</b> <%= idadeTxt %><br/>
+      <b>Escalão etário:</b> <%= escalao %>
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>
-
-

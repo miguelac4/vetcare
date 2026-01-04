@@ -3,7 +3,6 @@
   User: Miguel Cordeiro
   Date: 12/24/2025
   Time: 12:01 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
@@ -12,76 +11,132 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 
 <%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
+<%
     List<Agendamento> ags = (List<Agendamento>) request.getAttribute("agendamentos");
     DateTimeFormatter dfData = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter dfHora = DateTimeFormatter.ofPattern("HH:mm");
+    String ctx = request.getContextPath();
 %>
 
-<html>
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-    <title>Lista de Chamada</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VetCare — Lista de Chamada</title>
+    <link rel="stylesheet" href="<%= ctx %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+    <a class="logo" href="<%= ctx %>/veterinario/home.jsp">🐾 vetCare</a>
 
-<h2>Lista de Chamada (por data/hora)</h2>
+    <nav class="nav">
+      <a href="<%= ctx %>/veterinario/home.jsp">Home</a>
+      <a href="<%= ctx %>/veterinario/agendamentos/sem-veterinario">Sem veterinário</a>
+      <a class="nav-logout" href="<%= ctx %>/logout">Sair</a>
+    </nav>
+    <div class="user-badge">
+      <span class="role-pill"><%= roleLabel %></span>
+    </div>
 
-<a href="<%= request.getContextPath() %>/veterinario/home.jsp">Voltar</a>
-| <a href="<%= request.getContextPath() %>/logout">Logout</a>
+</header>
 
-<hr/>
+<main class="content">
 
-<% if (ags == null || ags.isEmpty()) { %>
-<p>Não existem agendamentos atribuídos a si.</p>
-<% } else { %>
+    <section class="page-head">
+        <div>
+            <h1>Lista de Chamada</h1>
+            <p class="muted">Agendamentos atribuídos a si (ordenados por data/hora)</p>
+        </div>
 
-<table border="1" cellpadding="6" cellspacing="0">
-    <tr>
-        <th>Data</th>
-        <th>Hora</th>
-        <th>ID</th>
-        <th>Animal</th>
-        <th>Serviço</th>
-        <th>Localidade</th>
-        <th>Estado</th>
-        <th>Ações</th>
-    </tr>
+        <div class="page-actions">
+            <a class="btn btn-secondary" href="<%= ctx %>/veterinario/home.jsp">Voltar</a>
+        </div>
+    </section>
 
-    <% for (Agendamento a : ags) {
-        LocalDateTime dt = a.getDataHora();
-        String data = (dt == null) ? "" : dt.format(dfData);
-        String hora = (dt == null) ? "" : dt.format(dfHora);
-    %>
-    <tr>
-        <td><%= data %></td>
-        <td><%= hora %></td>
-        <td><%= a.getIdAgendamento() %></td>
-        <td><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
-        <td><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
-        <td><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
-        <td><%= a.getEstado() == null ? "" : a.getEstado() %></td>
-        <td>
-            <!-- Histórico Clínic -->
-            <form method="get" action="<%= request.getContextPath() %>/veterinario/historico-clinico" style="margin:0;">
-                <input type="hidden" name="idAnimal" value="<%= a.getIdAnimal() %>"/>
-                <button type="submit">Atualizar histórico</button>
-            </form>
+    <section class="panel">
+        <div class="panel-head">
+            <h2>Registos</h2>
+            <p class="muted">Atualize o histórico do animal ou desassuma a marcação</p>
+        </div>
 
+        <% if (ags == null || ags.isEmpty()) { %>
+            <p class="muted">Não existem agendamentos atribuídos a si.</p>
+        <% } else { %>
 
-            <br/><br/>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>ID</th>
+                    <th>Animal</th>
+                    <th>Serviço</th>
+                    <th>Localidade</th>
+                    <th>Estado</th>
+                    <th class="col-actions">Ações</th>
+                </tr>
+                </thead>
 
-            <!-- Desassumir -->
-            <form method="post" action="<%= request.getContextPath() %>/veterinario/agendamentos/desassumir" style="margin:0;">
-                <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>"/>
-                <button type="submit">Desassumir</button>
-            </form>
-        </td>
+                <tbody>
+                <% for (Agendamento a : ags) {
+                    LocalDateTime dt = a.getDataHora();
+                    String data = (dt == null) ? "" : dt.format(dfData);
+                    String hora = (dt == null) ? "" : dt.format(dfHora);
+                %>
+                <tr>
+                    <td data-label="Data"><%= data %></td>
+                    <td data-label="Hora"><%= hora %></td>
+                    <td data-label="ID"><%= a.getIdAgendamento() %></td>
+                    <td data-label="Animal"><%= a.getNomeAnimal() == null ? "" : a.getNomeAnimal() %></td>
+                    <td data-label="Serviço"><%= a.getTipoServico() == null ? "" : a.getTipoServico() %></td>
+                    <td data-label="Localidade"><%= a.getLocalidade() == null ? "" : a.getLocalidade() %></td>
+                    <td data-label="Estado"><%= a.getEstado() == null ? "" : a.getEstado() %></td>
 
+                    <td data-label="Ações" class="td-actions">
+                        <form method="get"
+                              action="<%= ctx %>/veterinario/historico-clinico"
+                              style="display:inline; margin:0;">
+                            <input type="hidden" name="idAnimal" value="<%= a.getIdAnimal() %>"/>
+                            <button class="btn btn-primary btn-sm" type="submit">
+                                Atualizar histórico
+                            </button>
+                        </form>
 
-    </tr>
-    <% } %>
-</table>
+                        <form method="post"
+                              action="<%= ctx %>/veterinario/agendamentos/desassumir"
+                              style="display:inline; margin:0;">
+                            <input type="hidden" name="idAgendamento" value="<%= a.getIdAgendamento() %>"/>
+                            <button class="btn btn-secondary btn-sm" type="submit"
+                                    onclick="return confirm('Desassumir este agendamento?');">
+                                Desassumir
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
 
-<% } %>
+        <% } %>
+    </section>
+
+</main>
+
+<footer class="footer">
+    © 2025 VetCare — Sistema de Gestão
+</footer>
 
 </body>
 </html>

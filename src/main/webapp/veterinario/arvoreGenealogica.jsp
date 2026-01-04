@@ -1,12 +1,22 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Miguel
+  User: Miguel Cordeiro
   Date: 12/21/2025
   Time: 1:19 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.example.vetcare.model.Animal" %>
+
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
 
 <%
   Animal animal = (Animal) request.getAttribute("animal");
@@ -22,22 +32,48 @@
 
   if (animal == null) {
 %>
-<h2>Animal não encontrado.</h2>
-<a href="javascript:history.back()">Voltar</a>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Árvore Genealógica</title>
+  <link rel="stylesheet" href="<%= ctx %>/css/main.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="<%= ctx %>/veterinario/home.jsp">🐾 vetCare</a>
+  <nav class="nav">
+    <a href="<%= ctx %>/veterinario/home.jsp">Home</a>
+    <a class="nav-logout" href="<%= ctx %>/logout">Sair</a>
+  </nav>
+
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
+
+</header>
+
+<main class="content">
+  <section class="panel">
+    <div class="panel-head">
+      <h1>Árvore Genealógica</h1>
+      <p class="muted">Animal não encontrado.</p>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-secondary" href="javascript:history.back()">Voltar</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">© 2025 VetCare — Sistema de Gestão</footer>
+</body>
+</html>
 <%
     return;
   }
 %>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Árvore Genealógica</title>
-</head>
-<body>
-
-<h2>Árvore Genealógica</h2>
 
 <%
   String nif = (String) request.getAttribute("nif");
@@ -45,100 +81,146 @@
           + (nif != null && !nif.isBlank() ? "&nif=" + nif : "");
 %>
 
-<a href="<%= backClinico %>">Voltar ao registo clínico</a>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Árvore Genealógica</title>
+  <link rel="stylesheet" href="<%= ctx %>/css/main.css">
+</head>
 
+<body>
+<header class="topbar">
+  <a class="logo" href="<%= ctx %>/veterinario/home.jsp">🐾 vetCare</a>
 
-<a href="<%= ctx %>/logout">Logout</a>
+  <nav class="nav">
+    <a href="<%= ctx %>/veterinario/home.jsp">Home</a>
+    <a href="<%= ctx %>/veterinario/agendamentos/sem-veterinario">Marcações</a>
+    <a class="nav-logout" href="<%= ctx %>/logout">Sair</a>
+  </nav>
+</header>
 
-<hr/>
+<main class="content">
 
-<table border="1" cellpadding="10" cellspacing="0">
-  <tr>
-    <th>Avós</th>
-    <th>Pais</th>
-    <th>Animal</th>
-  </tr>
+  <section class="page-head">
+    <div>
+      <h1>Árvore Genealógica</h1>
+      <p class="muted">
+        Animal: <b><%= animal.getNome() %></b> (#<%= animal.getIdAnimal() %>)
+      </p>
+    </div>
 
-  <tr>
-    <td>
-      <b>Avô paterno:</b>
-      <%
-        if (avoPaterno != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoPaterno.getIdAnimal() %>">
-        <%= avoPaterno.getNome() %> (#<%= avoPaterno.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-      <br/>
+    <div class="page-actions">
+      <a class="btn btn-secondary" href="<%= backClinico %>">Voltar ao registo clínico</a>
+    </div>
+  </section>
 
-      <b>Avó paterna:</b>
-      <%
-        if (avoPaterna != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoPaterna.getIdAnimal() %>">
-        <%= avoPaterna.getNome() %> (#<%= avoPaterna.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-      <br/><br/>
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Família</h2>
+      <p class="muted">Avós → Pais → Animal</p>
+    </div>
 
-      <b>Avô materno:</b>
-      <%
-        if (avoMaterno != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoMaterno.getIdAnimal() %>">
-        <%= avoMaterno.getNome() %> (#<%= avoMaterno.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-      <br/>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Avós</th>
+        <th>Pais</th>
+        <th>Animal</th>
+      </tr>
+      </thead>
 
-      <b>Avó materna:</b>
-      <%
-        if (avoMaterna != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoMaterna.getIdAnimal() %>">
-        <%= avoMaterna.getNome() %> (#<%= avoMaterna.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-    </td>
+      <tbody>
+      <tr>
+        <td data-label="Avós">
+          <b>Avô paterno:</b>
+          <%
+            if (avoPaterno != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoPaterno.getIdAnimal() %>">
+              <%= avoPaterno.getNome() %> (#<%= avoPaterno.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
+          <br/>
 
-    <td>
-      <b>Pai:</b>
-      <%
-        if (pai != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= pai.getIdAnimal() %>">
-        <%= pai.getNome() %> (#<%= pai.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-      <br/>
+          <b>Avó paterna:</b>
+          <%
+            if (avoPaterna != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoPaterna.getIdAnimal() %>">
+              <%= avoPaterna.getNome() %> (#<%= avoPaterna.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
 
-      <b>Mãe:</b>
-      <%
-        if (mae != null) {
-      %>
-      <a href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= mae.getIdAnimal() %>">
-        <%= mae.getNome() %> (#<%= mae.getIdAnimal() %>)
-      </a>
-      <%
-        } else { out.print("-"); }
-      %>
-    </td>
+          <br/><br/>
 
-    <td>
-      <b><%= animal.getNome() %></b> (#<%= animal.getIdAnimal() %>)
-    </td>
-  </tr>
-</table>
+          <b>Avô materno:</b>
+          <%
+            if (avoMaterno != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoMaterno.getIdAnimal() %>">
+              <%= avoMaterno.getNome() %> (#<%= avoMaterno.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
+          <br/>
 
+          <b>Avó materna:</b>
+          <%
+            if (avoMaterna != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= avoMaterna.getIdAnimal() %>">
+              <%= avoMaterna.getNome() %> (#<%= avoMaterna.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
+        </td>
+
+        <td data-label="Pais">
+          <b>Pai:</b>
+          <%
+            if (pai != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= pai.getIdAnimal() %>">
+              <%= pai.getNome() %> (#<%= pai.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
+          <br/>
+
+          <b>Mãe:</b>
+          <%
+            if (mae != null) {
+          %>
+            <a class="link" href="<%= ctx %>/veterinario/animal/registro-clinico?id=<%= mae.getIdAnimal() %>">
+              <%= mae.getNome() %> (#<%= mae.getIdAnimal() %>)
+            </a>
+          <%
+            } else { out.print("<span class='muted'>-</span>"); }
+          %>
+        </td>
+
+        <td data-label="Animal">
+          <b><%= animal.getNome() %></b>
+          <div class="muted">#<%= animal.getIdAnimal() %></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 </body>
 </html>

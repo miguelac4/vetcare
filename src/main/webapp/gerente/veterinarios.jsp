@@ -3,52 +3,112 @@
   User: Miguel
   Date: 12/22/2025
   Time: 6:08 PM
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="java.util.*" %>
 <%@ page import="org.example.vetcare.model.Veterinario" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+
+<%
+  String nome = (String) session.getAttribute("userNome");
+  String role = (String) session.getAttribute("userRole");
+
+  String roleLabel = role;
+  if ("gerente".equals(role)) roleLabel = "Gerente";
+  else if ("veterinario".equals(role)) roleLabel = "Veterinário";
+  else if ("tutor".equals(role)) roleLabel = "Tutor";
+  else if ("rececionista".equals(role)) roleLabel = "Rececionista";
+%>
+
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <title>Gerente - Veterinários</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VetCare — Gerente | Veterinários</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/main.css">
 </head>
+
 <body>
+<header class="topbar">
+  <a class="logo" href="<%= request.getContextPath() %>/gerente/home.jsp">🐾 vetCare</a>
 
-<h2>Veterinários</h2>
+  <nav class="nav">
+    <a href="<%= request.getContextPath() %>/gerente/utilizadores">Utilizadores</a>
+    <a class="nav-logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+  </nav>
 
-<table border="1" cellpadding="6">
-  <tr>
-    <th>ID</th>
-    <th>Nome</th>
-    <th>Email</th>
-    <th>Nº Licença</th>
-    <th>Ações</th>
-  </tr>
+  <%-- Badge do utilizador --%>
+  <div class="user-badge">
+    <span class="role-pill"><%= roleLabel %></span>
+  </div>
 
-  <%
-    List<Veterinario> veterinarios = (List<Veterinario>) request.getAttribute("veterinarios");
-    if (veterinarios != null) {
-      for (Veterinario v : veterinarios) {
-  %>
-  <tr>
-    <td><%= v.getId() %></td>
-    <td><%= v.getNome() %></td>
-    <td><%= v.getEmail() %></td>
-    <td><%= v.getNumLicenca() == null ? "(sem registo)" : v.getNumLicenca() %></td>
-    <td>
-      <a href="<%= request.getContextPath() %>/gerente/utilizadores/veterinarios/editar?id=<%= v.getId() %>">Editar</a>
-    </td>
+</header>
 
-  </tr>
-  <%
+<main class="content">
+  <section class="page-head">
+    <div>
+      <h1>Veterinários</h1>
+      <p class="muted">Lista de veterinários registados no sistema</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Registos</h2>
+      <p class="muted">Edite os dados de um veterinário</p>
+    </div>
+
+    <%
+      List<Veterinario> veterinarios = (List<Veterinario>) request.getAttribute("veterinarios");
+      if (veterinarios == null || veterinarios.isEmpty()) {
+    %>
+      <p class="muted">Sem veterinários para mostrar.</p>
+    <%
+      } else {
+    %>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Nº Licença</th>
+        <th class="col-actions">Ações</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <%
+        for (Veterinario v : veterinarios) {
+      %>
+      <tr>
+        <td data-label="ID"><%= v.getId() %></td>
+        <td data-label="Nome"><%= v.getNome() %></td>
+        <td data-label="Email"><%= v.getEmail() %></td>
+        <td data-label="Nº Licença"><%= v.getNumLicenca() == null ? "(sem registo)" : v.getNumLicenca() %></td>
+
+        <td data-label="Ações" class="td-actions">
+          <a class="btn btn-secondary btn-sm"
+             href="<%= request.getContextPath() %>/gerente/utilizadores/veterinarios/editar?id=<%= v.getId() %>">
+            Editar
+          </a>
+        </td>
+      </tr>
+      <%
+        }
+      %>
+      </tbody>
+    </table>
+
+    <%
       }
-    }
-  %>
-</table>
+    %>
+  </section>
+</main>
 
-<p>
-  <a href="<%= request.getContextPath() %>/gerente/utilizadores">Voltar</a>
-</p>
-
+<footer class="footer">
+  © 2025 VetCare — Sistema de Gestão
+</footer>
 </body>
 </html>
