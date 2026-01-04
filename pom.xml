@@ -9,7 +9,6 @@
     <artifactId>vetCare</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- importante: é uma aplicação web -->
     <packaging>war</packaging>
 
     <properties>
@@ -26,7 +25,7 @@
             <version>9.0.0</version>
         </dependency>
 
-        <!-- API de Servlets (para Tomcat 10+, jakarta.servlet) -->
+        <!-- API de Servlets -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
